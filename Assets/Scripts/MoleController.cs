@@ -28,14 +28,17 @@ public class MoleController : MonoBehaviour
     public int myNumber;
     private float pushForce = 1;
 
+    bool col;
 
+    public Rigidbody rb;
 
     // Start is called before the first frame update
 
     void Start()
 
     {
-
+        rb = GetComponent<Rigidbody>();
+        rb.isKinematic = true;
         for (int i = 0; i < 5; i++)
         {
             if (this.name == selectMole.GetComponent<SelectPopupMole>().molePrefab[i].name)
@@ -102,25 +105,14 @@ public class MoleController : MonoBehaviour
         transform.position = originalPosition;
 
     }
-    private void PushDown() //instead of moving directly to original position the gaol is the mole will be pushed along with hammer
-    {
-        this.gameObject.GetComponent<Rigidbody>().AddForce(0, -5, 0);
-    }
-
 
     public void OnCollisionEnter(Collision other)
     {
-        //if (other.gameObject.tag == "Hammer" && this.tag == "moles")
-        //{
-        //    Hit();
-        //    selectMole.GetComponent<SelectPopupMole>().MoleHitHammer(myNumber);
-        //    //if special score, then more than one
 
-
-
-        //}
         if (other.gameObject.tag == "Plate")
         {
+            Debug.Log("Collision from the floor");
+            col = false;
             MoveDown();
             gameController.GetComponent<GameController>().score += 1;
             selectMole.GetComponent<SelectPopupMole>().MoleHitHammer(myNumber);
@@ -132,16 +124,32 @@ public class MoleController : MonoBehaviour
     {
         if (other.gameObject.tag == "Hammer" && this.tag == "moles")
         {
-            Hit();
-            ///this.gameObject.GetComponent<Rigidbody>().AddForce(0, -5, 0);
-            //selectMole.GetComponent<SelectPopupMole>().MoleHitHammer(myNumber);
-
-
+            var relativePosition = transform.InverseTransformPoint(other.transform.position);
+            if (relativePosition.y > 1 && col == false)
+            {
+                Debug.Log("The object is above.");
+                rb.isKinematic = false;
+                col = true;
+                Hit();
+                MoveDown(); // CAN BE REMOVED IF DONT WANT MOLES TELEPORTING DOWN
+                //this.gameObject.GetComponent<Rigidbody>().AddForce(0, -10, 0);
+            }
+            if (relativePosition.x > 0 && col == false)
+            {
+                Debug.Log("The object is to the right");
+                rb.isKinematic = true;
+            }
+            if (relativePosition.x < 0 && col == false)
+            {
+                Debug.Log("The object is to the left");
+                rb.isKinematic = true;
+            }
+            if (relativePosition.z > 0 && col == false)
+            {
+                Debug.Log("The object is in front.");
+                rb.isKinematic = true;
+            }
         }
-    }
-    public void OnCollisionExit(Collision other) // NOT WORKING //NEXT TRY ADDING TRIGGER UNDER MOLE THAT WILL STOP POSITION, INCREASE SCORE, AND SELECTNEXTMOLE
-    {
-        this.gameObject.GetComponent<Rigidbody>().AddForce(0, 0, 0);
     }
 
     private void TickTimers()
@@ -173,12 +181,11 @@ public class MoleController : MonoBehaviour
             isHit = true;
             isUp = false;
             //MoveDown(); 
-            //PushDown();
             isMovingUp = false;
             downTimer = 0;
             upTimer = 0;
             moveTimer = 0;
-            this.tag = "moles";
+            //this.tag = "moles";
             //gameController.GetComponent<GameController>().score += 1;
 
         }

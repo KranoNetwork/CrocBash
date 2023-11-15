@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7159585912867894450}
   - component: {fileID: 7029252568665634764}
   - component: {fileID: -957199902510715954}
+  - component: {fileID: 599568310022190187}
   m_Layer: 0
   m_Name: Pirate
   m_TagString: moles
@@ -89,7 +90,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 8556077344922778002}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
@@ -101,7 +102,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8556077344922778002}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 41e95082e81d62f428cbfb559fe093cd, type: 3}
   m_Name: 
@@ -113,6 +114,7 @@ MonoBehaviour:
   randoLimitMax: 7
   maxUpTime: 5
   myNumber: 0
+  rb: {fileID: 0}
 --- !u!54 &-957199902510715954
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -129,3 +131,16 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 122
   m_CollisionDetection: 0
+--- !u!65 &599568310022190187
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8556077344922778002}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 2, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
