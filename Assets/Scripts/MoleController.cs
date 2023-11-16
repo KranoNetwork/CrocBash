@@ -109,49 +109,51 @@ public class MoleController : MonoBehaviour
     public void OnCollisionEnter(Collision other)
     {
 
-        if (other.gameObject.tag == "Plate")
-        {
-            Debug.Log("Collision from the floor");
-            col = false;
-            MoveDown();
-            gameController.GetComponent<GameController>().score += 1;
-            selectMole.GetComponent<SelectPopupMole>().MoleHitHammer(myNumber);
-        }
-
-    }
-
-    public void OnCollisionStay(Collision other)
-    {
-        if (other.gameObject.tag == "Hammer" && this.tag == "moles")
+        if (other.gameObject.tag == "Hammer" && this.tag == "SelectedMole")
         {
             var relativePosition = transform.InverseTransformPoint(other.transform.position);
-            if (relativePosition.y > 1 && col == false)
+            if (relativePosition.y > 0 && col == false)
             {
                 Debug.Log("The object is above.");
                 rb.isKinematic = false;
                 col = true;
                 Hit();
-                MoveDown(); // CAN BE REMOVED IF DONT WANT MOLES TELEPORTING DOWN
+                //MoveDown(); 
                 //this.gameObject.GetComponent<Rigidbody>().AddForce(0, -10, 0);
+            }
+            if (relativePosition.y < 1 && col == false)
+            {
+                //Debug.Log("The object is to the Below");
+                //MoveDown();
+                rb.isKinematic = true;
             }
             if (relativePosition.x > 0 && col == false)
             {
-                Debug.Log("The object is to the right");
+                //Debug.Log("The object is to the right");
                 rb.isKinematic = true;
             }
             if (relativePosition.x < 0 && col == false)
             {
-                Debug.Log("The object is to the left");
+                //Debug.Log("The object is to the left");
                 rb.isKinematic = true;
             }
             if (relativePosition.z > 0 && col == false)
             {
-                Debug.Log("The object is in front.");
+                //Debug.Log("The object is in front.");
                 rb.isKinematic = true;
             }
         }
-    }
 
+		//if (other.gameObject.tag == "Plate")
+		//{
+		//	//Debug.Log("Collision from the floor");
+		//	col = false;
+		//	MoveDown();
+		//	gameController.GetComponent<GameController>().score += 1;
+		//	selectMole.GetComponent<SelectPopupMole>().MoleHitHammer(myNumber);
+		//}
+
+	}
     private void TickTimers()
 
     {
@@ -178,15 +180,18 @@ public class MoleController : MonoBehaviour
     {
         if (isHit == false)
         {
+            col = false;
+            rb.isKinematic = true;
             isHit = true;
             isUp = false;
-            //MoveDown(); 
+            MoveDown();
             isMovingUp = false;
             downTimer = 0;
             upTimer = 0;
             moveTimer = 0;
             //this.tag = "moles";
-            //gameController.GetComponent<GameController>().score += 1;
+            gameController.GetComponent<GameController>().score += 1;
+            selectMole.GetComponent<SelectPopupMole>().MoleHitHammer(myNumber);
 
         }
     }
