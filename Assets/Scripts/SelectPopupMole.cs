@@ -23,14 +23,16 @@ public class SelectPopupMole : MonoBehaviour
     public Material setMaterial; //replace with mesh renderer material for 3d renders
 
     //HitSounds
-    AudioSource hitSound;
+    //HitSounds
+    AudioSource hitSound;  //https://pixabay.com/sound-effects/search/whack/
     bool s_Play;
-    bool s_ToggleChange;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        hitSound = GetComponent<AudioSource>();
+        s_Play = false;
         hitSound = GetComponent<AudioSource>();
         Array.Resize(ref selectedmoles, molePrefab.Length);
 
@@ -74,12 +76,12 @@ public class SelectPopupMole : MonoBehaviour
 
         }
 
-        PlayHitSoundEffect();
     }
 
     public void MoleHitHammer(int i)
     {
-
+        s_Play = true;
+        PlayHitSoundEffect();
         molePrefab[i].gameObject.tag = "moles";
         molePrefab[i].GetComponent<Renderer>().material = moleSkin;
         selectedmoles[i] = false;
@@ -151,25 +153,7 @@ public class SelectPopupMole : MonoBehaviour
             return false;
         }
     }
-    void PlayHitSoundEffect()
-    {
-        //Check to see if you just set the toggle to positive
-        if (s_Play == true && s_ToggleChange == true)
-        {
-            //Play the audio you attach to the AudioSource component
-            hitSound.Play();
-            //Ensure audio doesn’t play more than once
-            s_ToggleChange = false;
-        }
-        //Check if you just set the toggle to false
-        if (s_Play == false && s_ToggleChange == true)
-        {
-            //Stop the audio
-            hitSound.Stop();
-            //Ensure audio doesn’t play more than once
-            s_ToggleChange = false;
-        }
-    }
+    
 
 
     public void popUp(GameObject Mole)
@@ -177,6 +161,24 @@ public class SelectPopupMole : MonoBehaviour
 
         Mole.GetComponent<MoleController>().Popup();
     }
+
+    void PlayHitSoundEffect()
+    {
+        //Check to see if you just set the toggle to positive
+        if (s_Play == true)
+        {
+            //Play the audio you attach to the AudioSource component
+            Debug.Log("Play AUdio(WHACK)");
+            hitSound.Play();
+        }
+        //Check if you just set the toggle to false
+        if (s_Play == false)
+        {
+            //Stop the audio
+            hitSound.Stop();
+        }
+    }
+
 
     void CountDown()
     {
