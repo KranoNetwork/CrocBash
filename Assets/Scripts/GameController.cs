@@ -66,8 +66,8 @@ public class GameController : MonoBehaviour
     {
         if(time <= 0)
         {
-            //SceneManager.LoadScene("BarrettVRTest", LoadSceneMode.Additive);
-            //time = 120f;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            time = 30f;
         }
     }
 }

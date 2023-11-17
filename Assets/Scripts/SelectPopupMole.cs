@@ -80,7 +80,7 @@ public class SelectPopupMole : MonoBehaviour
     public void MoleHitHammer(int i)
     {
 
-
+        molePrefab[i].gameObject.tag = "moles";
         molePrefab[i].GetComponent<Renderer>().material = moleSkin;
         selectedmoles[i] = false;
         SelectNextMole();
@@ -121,6 +121,7 @@ public class SelectPopupMole : MonoBehaviour
             selectedmoles[randomMole] = true; // change value to true //random mole selected
 
             popUp(molePrefab[randomMole]); //run popUp function on selected mole
+            molePrefab[randomMole].gameObject.tag = "SelectedMole";
             molePrefab[randomMole].GetComponent<Renderer>().material = setMaterial;
 
 
