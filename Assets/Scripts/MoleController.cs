@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using UnityEngine.SocialPlatforms.Impl;
 using TMPro;
 using UnityEngine.SceneManagement;
+using static UnityEditor.LightmapEditorSettings;
+using static UnityEngine.GraphicsBuffer;
 
 
 public class MoleController : MonoBehaviour
@@ -13,6 +15,7 @@ public class MoleController : MonoBehaviour
 
     public GameObject selectMole;
     public GameObject gameController; // References Game Controller
+    public GameObject Player;
     public float moveDistance = 0f;
     [SerializeField] private float moveSpeed = .5f;
     float downTimer = 0;
@@ -50,6 +53,9 @@ public class MoleController : MonoBehaviour
         this.tag = "moles";
         originalPosition = transform.position;
 
+        var rotationAngle = Quaternion.LookRotation(Player.transform.position - this.transform.position);
+        transform.rotation = rotationAngle;
+
     }
 
     // Update is called once per frame
@@ -69,12 +75,9 @@ public class MoleController : MonoBehaviour
                 MoveDown();
 
                 isUp = false;
-
                 downTimer = 0;
-
             }
         }
-
 
     }
 
@@ -90,7 +93,7 @@ public class MoleController : MonoBehaviour
         isHit = false;
         isMovingUp = true;
         moveDistance += moveSpeed * Time.deltaTime;
-        moveDistance = Mathf.Clamp01(moveDistance);
+        moveDistance = Mathf.Clamp01(moveDistance) + moveDistance;
         Debug.Log("Popup script STARTED for " + this);
         //transform.position = Vector3.Lerp(this.transform.position, this.transform.position + new Vector3(0, moveDistance, 0), moveSpeed * Time.deltaTime);
         //transform.position = Vector3.Lerp(transform.position, transform.position + new Vector3(0, moveDistance, 0), Time.deltaTime / moveSpeed);
