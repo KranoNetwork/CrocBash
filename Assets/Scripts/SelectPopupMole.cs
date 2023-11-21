@@ -16,7 +16,7 @@ public class SelectPopupMole : MonoBehaviour
 
     public bool[] selectedmoles; //create pirates and check using boolean value to determine which pirate is selected
 
-    public float timeLeft = 10f; // time left untile nexty mole spawns
+    public float timeLeft = 0f; // time left untile nexty mole spawns
     public int amountOfPopUps = 1; // how many pirates pop up at a time
 
     public Material moleSkin; //temp material set // change to MESH
@@ -44,6 +44,8 @@ public class SelectPopupMole : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //timeLeft = GetComponent<GameController>().time;
+        //Debug.Log("time left for 2 moles: " + timeLeft);
         CountDown();
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit))

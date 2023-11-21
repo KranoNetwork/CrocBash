@@ -53,7 +53,16 @@ public class MoleController : MonoBehaviour
         this.tag = "moles";
         originalPosition = transform.position;
 
-        var rotationAngle = Quaternion.LookRotation(Player.transform.position - this.transform.position);
+        // Get the direction to the player
+        Vector3 directionToPlayer = Player.transform.position - transform.position;
+
+        // Flatten the direction to only consider the XZ plane (Y-axis is ignored)
+        directionToPlayer.y = 0;
+
+        // Create the rotation angle only on the Y-axis
+        Quaternion rotationAngle = Quaternion.LookRotation(directionToPlayer);
+
+        // Apply the rotation only on the Y-axis
         transform.rotation = rotationAngle;
 
     }
