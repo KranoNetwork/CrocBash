@@ -35,11 +35,14 @@ public class MoleController : MonoBehaviour
 
     public Rigidbody rb;
 
+    AudioSource music;
+
     // Start is called before the first frame update
 
     void Start()
 
     {
+        music = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();
         rb.isKinematic = true;
         for (int i = 0; i < 5; i++)
@@ -106,7 +109,7 @@ public class MoleController : MonoBehaviour
         Debug.Log("Popup script STARTED for " + this);
         //transform.position = Vector3.Lerp(this.transform.position, this.transform.position + new Vector3(0, moveDistance, 0), moveSpeed * Time.deltaTime);
         //transform.position = Vector3.Lerp(transform.position, transform.position + new Vector3(0, moveDistance, 0), Time.deltaTime / moveSpeed);
-        transform.position = Vector3.Lerp(this.transform.position, this.transform.position + new Vector3(0, moveDistance, 0), moveDistance);
+        transform.position = Vector3.Lerp(this.transform.position, this.transform.position + new Vector3(0, 2, 0), moveDistance);
 
     }
 

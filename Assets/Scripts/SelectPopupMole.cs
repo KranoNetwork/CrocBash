@@ -33,7 +33,7 @@ public class SelectPopupMole : MonoBehaviour
     {
         hitSound = GetComponent<AudioSource>();
         s_Play = false;
-        hitSound = GetComponent<AudioSource>();
+        //hitSound = GetComponent<AudioSource>();
         Array.Resize(ref selectedmoles, molePrefab.Length);
 
 
