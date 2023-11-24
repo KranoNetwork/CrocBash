@@ -5,6 +5,12 @@ using UnityEngine.UI;
 using UnityEngine.SocialPlatforms.Impl;
 using TMPro;
 using UnityEngine.SceneManagement;
+using Liminal.Core.Fader;
+using Liminal.Platform.Experimental.App.Experiences;
+using Liminal.SDK.Core;
+using Liminal.SDK.VR;
+using Liminal.SDK.VR.Avatars;
+using Liminal.SDK.VR.Input;
 
 public class GameController : MonoBehaviour
 {
@@ -36,6 +42,8 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        CheckVRController();
+
         //scoreTxt.text = score.ToString();
         if (isTimer)
         {
@@ -43,19 +51,47 @@ public class GameController : MonoBehaviour
             DisplayTime();
         }
 
+        gameEnd();
+    }
+    void CheckVRController()
+    {
+        var avatar = VRAvatar.Active;
+        if (avatar == null)
+            return;
 
-        switch (phases) 
+        var rightInput = GetInput(VRInputDeviceHand.Right);
+        var leftInput = GetInput(VRInputDeviceHand.Left);
+
+        // Input Examples
+        if (rightInput != null)
         {
-            case 0:
-                default: 
-                break;
-            case 1:
-                break;
-            case 2:
-                break;
+            if (rightInput.GetButtonDown(VRButton.Back))
+                Debug.Log("Back button pressed");
+
+            if (rightInput.GetButtonDown(VRButton.One))
+                Debug.Log("Trigger button pressed");
         }
 
-        gameEnd();
+        if (leftInput != null)
+        {
+            if (leftInput.GetButtonDown(VRButton.Back))
+                Debug.Log("Back button pressed");
+
+            if (leftInput.GetButtonDown(VRButton.One))
+                Debug.Log("Trigger button pressed");
+        }
+
+        // Any input
+        // VRDevice.Device.GetButtonDown(VRButton.One);
+    }
+    private IVRInputDevice GetInput(VRInputDeviceHand hand)
+    {
+        var device = VRDevice.Device;
+        return hand == VRInputDeviceHand.Left ? device.SecondaryInputDevice : device.PrimaryInputDevice;
+    }
+    public void StartBTN()
+    {
+        SceneManager.LoadScene("ArtAssetsTestScene", LoadSceneMode.Additive);
     }
     void DisplayTime()
     {

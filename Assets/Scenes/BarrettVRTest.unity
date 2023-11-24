@@ -2915,7 +2915,7 @@ MonoBehaviour:
   score: 0
   time: 120
   phases: 0
-  timeNum: {fileID: 2144467925}
+  timeNum: {fileID: 0}
   scoreTxt: {fileID: 2060554720}
 --- !u!4 &1864494147
 Transform:
