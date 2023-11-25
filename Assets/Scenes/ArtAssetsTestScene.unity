@@ -4705,7 +4705,7 @@ MonoBehaviour:
   amountOfSpecialEnemies: 0
   PlayerDir: {x: 0, y: 0, z: 0, w: 0}
   score: 0
-  time: 10
+  time: 100
   phases: 0
   timeNum: {fileID: 1620636822}
   scoreTxt: {fileID: 2060554720}
