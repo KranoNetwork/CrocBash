@@ -5,10 +5,16 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/BarrettVRTest.unity
     guid: f9cb3f52ae81e8e47aaa41acf4089560
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 7d57efa8e0cea6e43a978def5f584c22
+<<<<<<< HEAD
+=======
+  - enabled: 1
+    path: Assets/Scenes/ArtAssetsTestScene.unity
+    guid: 765e864480d9f6c46afb9d1595456d77
+>>>>>>> 5215c5f12ba7c99377e43b026c01e594def5d9d6
   m_configObjects: {}
