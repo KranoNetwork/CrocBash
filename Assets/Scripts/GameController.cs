@@ -36,62 +36,27 @@ public class GameController : MonoBehaviour
 
         //timeNum.text = time.ToString();
         isTimer = true;
-        
     }
 
     // Update is called once per frame
     void Update()
     {
-        CheckVRController();
-
         //scoreTxt.text = score.ToString();
         if (isTimer)
         {
             time -= Time.deltaTime;
             DisplayTime();
         }
-
-        gameEnd();
-    }
-    void CheckVRController()
-    {
-        var avatar = VRAvatar.Active;
-        if (avatar == null)
-            return;
-
-        var rightInput = GetInput(VRInputDeviceHand.Right);
-        var leftInput = GetInput(VRInputDeviceHand.Left);
-
-        // Input Examples
-        if (rightInput != null)
+		else
+		{
+            gameEnd();
+		}
+        scoreTxt.text = score.ToString();
+        if (time <= 0)
         {
-            if (rightInput.GetButtonDown(VRButton.Back))
-                Debug.Log("Back button pressed");
+            isTimer = false;
 
-            if (rightInput.GetButtonDown(VRButton.One))
-                Debug.Log("Trigger button pressed");
         }
-
-        if (leftInput != null)
-        {
-            if (leftInput.GetButtonDown(VRButton.Back))
-                Debug.Log("Back button pressed");
-
-            if (leftInput.GetButtonDown(VRButton.One))
-                Debug.Log("Trigger button pressed");
-        }
-
-        // Any input
-        // VRDevice.Device.GetButtonDown(VRButton.One);
-    }
-    private IVRInputDevice GetInput(VRInputDeviceHand hand)
-    {
-        var device = VRDevice.Device;
-        return hand == VRInputDeviceHand.Left ? device.SecondaryInputDevice : device.PrimaryInputDevice;
-    }
-    public void StartBTN()
-    {
-        SceneManager.LoadScene("ArtAssetsTestScene", LoadSceneMode.Additive);
     }
     void DisplayTime()
     {
@@ -101,11 +66,8 @@ public class GameController : MonoBehaviour
     }
     void gameEnd()
     {
-        if(time <= 0)
-        {
-            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //reload the same scene from start
-            // go back to main menu screen
-            SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
-        }
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //reload the same scene from start
+        // go back to main menu screen
+        SceneManager.LoadScene("MainMenu");
     }
 }

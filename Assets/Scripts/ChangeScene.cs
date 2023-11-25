@@ -16,9 +16,10 @@ public class ChangeScene : MonoBehaviour
     {
         
     }
-	private void OnCollisionEnter(Collision collision)
+	public void OnTriggerEnter(Collider other)
 	{
         //SceneManager.LoadScene("ArtAssetsTestScene", LoadSceneMode.Additive);
         SceneManager.LoadScene("ArtAssetsTestScene");
+        Debug.Log("CONTACT");
     }
 }
