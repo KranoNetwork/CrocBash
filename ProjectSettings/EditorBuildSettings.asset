@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/BarrettVRTest.unity
     guid: f9cb3f52ae81e8e47aaa41acf4089560
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 7d57efa8e0cea6e43a978def5f584c22
   m_configObjects: {}

@@ -103,8 +103,9 @@ public class GameController : MonoBehaviour
     {
         if(time <= 0)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            time = 30f;
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //reload the same scene from start
+            // go back to main menu screen
+            SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
         }
     }
 }
