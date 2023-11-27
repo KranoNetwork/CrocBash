@@ -354,8 +354,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 57, y: -39.000034}
-  m_SizeDelta: {x: 375.1, y: 70.3}
+  m_AnchoredPosition: {x: 200, y: -30}
+  m_SizeDelta: {x: 500, y: 140}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &132254431
 MonoBehaviour:
@@ -4163,7 +4163,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Hit Mole To Start
+  m_Text: "Hit The Crocodile Pirate\n To Start"
 --- !u!222 &1748223521
 CanvasRenderer:
   m_ObjectHideFlags: 0
