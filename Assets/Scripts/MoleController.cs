@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using UnityEngine.SocialPlatforms.Impl;
 using TMPro;
 using UnityEngine.SceneManagement;
-using static UnityEditor.LightmapEditorSettings;
 using static UnityEngine.GraphicsBuffer;
 
 
