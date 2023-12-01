@@ -63,7 +63,7 @@ public class SelectPopupMole : MonoBehaviour
                             {
                                 s_Play = true;
                                 molePrefab[i].GetComponent<MoleController>().Hit();
-                                molePrefab[i].GetComponent<Renderer>().material = moleSkin;
+                                //molePrefab[i].GetComponent<Renderer>().material = moleSkin;
                                 selectedmoles[i] = false;
                                 break; // Exit the loop once a mole is hit
                             }
@@ -85,7 +85,7 @@ public class SelectPopupMole : MonoBehaviour
         s_Play = true;
         PlayHitSoundEffect();
         molePrefab[i].gameObject.tag = "moles";
-        molePrefab[i].GetComponent<Renderer>().material = moleSkin;
+        //molePrefab[i].GetComponent<Renderer>().material = moleSkin;
         selectedmoles[i] = false;
         SelectNextMole();
 
@@ -126,7 +126,7 @@ public class SelectPopupMole : MonoBehaviour
 
             popUp(molePrefab[randomMole]); //run popUp function on selected mole
             molePrefab[randomMole].gameObject.tag = "SelectedMole";
-            molePrefab[randomMole].GetComponent<Renderer>().material = setMaterial;
+            //molePrefab[randomMole].GetComponent<Renderer>().material = setMaterial;
 
 
         }
