@@ -129,12 +129,15 @@ public class MoleController : MonoBehaviour
             var relativePosition = transform.InverseTransformPoint(other.transform.position);
             if (relativePosition.y > 0 && col == false)
             {
-                Debug.Log("The object is above.");
-                rb.isKinematic = false;
                 col = true;
-                Hit();
-                //MoveDown(); 
-                //this.gameObject.GetComponent<Rigidbody>().AddForce(0, -10, 0);
+                if(col == true)
+                {
+                    Debug.Log("The object is above.");
+                    rb.isKinematic = false;
+                    Hit();
+                    //MoveDown(); 
+                    //this.gameObject.GetComponent<Rigidbody>().AddForce(0, -10, 0);
+                }
             }
             if (relativePosition.y < 1 && col == false)
             {
