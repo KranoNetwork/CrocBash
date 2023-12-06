@@ -1450,6 +1450,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1142632331}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &777846822 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1260162968871696499, guid: 22276a8657744e04cba8ad0a2caf4195,
+    type: 3}
+  m_PrefabInstance: {fileID: 1601303090}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &807123477 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: ad3e0a484121b994dafa53bc5e003b00,
@@ -3545,6 +3551,12 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 0a97e81f924e4164d81e828e0bb97e22, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b0f07899ae2e7943966660e95356418, type: 3}
+--- !u!1 &1557515464 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1260162969354081713, guid: 22276a8657744e04cba8ad0a2caf4195,
+    type: 3}
+  m_PrefabInstance: {fileID: 1601303090}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1601303090
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4004,6 +4016,8 @@ GameObject:
   - component: {fileID: 1743085168}
   - component: {fileID: 1743085167}
   - component: {fileID: 1743085166}
+  - component: {fileID: 1743085169}
+  - component: {fileID: 1743085170}
   m_Layer: 5
   m_Name: VRCanvasExample
   m_TagString: Untagged
@@ -4093,6 +4107,36 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!225 &1743085169
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1743085164}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &1743085170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1743085164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d724f5663e9188b47bda75ae9d7ca320, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fadeRate: 0.05
+  fadeDelay: 100
+  timeInbetween: 1000
+  CanvasGroup: {fileID: 1743085169}
+  RHand: {fileID: 777846822}
+  LHand: {fileID: 1557515464}
 --- !u!1 &1748223518
 GameObject:
   m_ObjectHideFlags: 0
