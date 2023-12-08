@@ -36,6 +36,8 @@ public class MoleController : MonoBehaviour
 
     AudioSource music;
 
+    public AudioSource bonk;
+
     // Start is called before the first frame update
 
     void Start()
@@ -207,6 +209,7 @@ public class MoleController : MonoBehaviour
             upTimer = 0;
             moveTimer = 0;
             //this.tag = "moles";
+            bonk.Play();
             gameController.GetComponent<GameController>().score += 1;
             selectMole.GetComponent<SelectPopupMole>().MoleHitHammer(myNumber);
 
