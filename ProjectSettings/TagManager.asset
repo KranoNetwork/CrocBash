@@ -4,11 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - moles
-  - SelectedMole
-  - Hammer
-  - SelectedMole2
   - Plate
+  - moles
+  - Hammer
   layers:
   - Default
   - TransparentFX

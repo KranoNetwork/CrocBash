@@ -10,6 +10,7 @@ using static UnityEngine.GraphicsBuffer;
 
 public class MoleController : MonoBehaviour
 {
+    [SerializeField] TagObject tags;
 
 
     public GameObject selectMole;
@@ -54,7 +55,7 @@ public class MoleController : MonoBehaviour
                 break;
             }
         }
-        this.tag = "moles";
+        
         originalPosition = transform.position;
 
         // Get the direction to the player
@@ -125,7 +126,7 @@ public class MoleController : MonoBehaviour
     public void OnCollisionEnter(Collision other)
     {
 
-        if (other.gameObject.tag == "Hammer" && this.tag == "SelectedMole")
+        if (other.gameObject.CompareTags("Moles") && this.gameObject.CompareTags("SelectedMole"))
         {
             var relativePosition = transform.InverseTransformPoint(other.transform.position);
             if (relativePosition.y > 0 && col == false)

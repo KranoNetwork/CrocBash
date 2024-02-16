@@ -1,6 +1,6 @@
 {
     "PreviousScene": "",
-    "TargetScene": "",
+    "TargetScene": "Assets/Scenes/MainMenu.unity",
     "AdditionalReferences": [],
-    "SelectedPlatform": 0
+    "SelectedPlatform": 2
 }

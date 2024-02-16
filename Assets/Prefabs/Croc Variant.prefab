@@ -147,6 +147,20 @@ MonoBehaviour:
   myNumber: 0
   rb: {fileID: 9095442930155831779}
   bonk: {fileID: 2698356432364527823}
+--- !u!114 &3886885053779191389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7781874854842839418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8058476f7c940f74895b95fca56d50a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Tags:
+  - Moles
 --- !u!1001 &1792196141391865971
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -159,6 +173,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Croc Variant
       objectReference: {fileID: 0}
+    - target: {fileID: -9045506348268794820, guid: 6c17ae65aee5db94381509ccb2f544e9,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 00abfa159065b0448bee2b5ac487756a, type: 2}
     - target: {fileID: -4216859302048453862, guid: 6c17ae65aee5db94381509ccb2f544e9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -214,11 +233,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -9045506348268794820, guid: 6c17ae65aee5db94381509ccb2f544e9,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 00abfa159065b0448bee2b5ac487756a, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6c17ae65aee5db94381509ccb2f544e9, type: 3}
 --- !u!1 &7781874854842839418 stripped

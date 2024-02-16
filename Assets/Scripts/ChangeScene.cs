@@ -5,6 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class ChangeScene : MonoBehaviour
 {
+
+    [SerializeField] private GameObject MainMenuScene;
+    [SerializeField] private GameObject GameScene;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,8 +22,8 @@ public class ChangeScene : MonoBehaviour
     }
 	public void OnTriggerEnter(Collider other)
 	{
-        //SceneManager.LoadScene("ArtAssetsTestScene", LoadSceneMode.Additive);
-        SceneManager.LoadScene("ArtAssetsTestScene");
+        MainMenuScene.SetActive(false);
+        GameScene.SetActive(true);
         Debug.Log("CONTACT");
     }
 }
