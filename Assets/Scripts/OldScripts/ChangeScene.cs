@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class ChangeScene : MonoBehaviour
 {
-
+    
     [SerializeField] private GameObject MainMenuScene;
     [SerializeField] private GameObject GameScene;
 

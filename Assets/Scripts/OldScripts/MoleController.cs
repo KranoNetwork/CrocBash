@@ -164,15 +164,6 @@ public class MoleController : MonoBehaviour
             }
         }
 
-		//if (other.gameObject.tag == "Plate")
-		//{
-		//	//Debug.Log("Collision from the floor");
-		//	col = false;
-		//	MoveDown();
-		//	gameController.GetComponent<GameController>().score += 1;
-		//	selectMole.GetComponent<SelectPopupMole>().MoleHitHammer(myNumber);
-		//}
-
 	}
     private void TickTimers()
 
@@ -209,7 +200,6 @@ public class MoleController : MonoBehaviour
             downTimer = 0;
             upTimer = 0;
             moveTimer = 0;
-            //this.tag = "moles";
             bonk.Play();
             gameController.GetComponent<GameController>().score += 1;
             selectMole.GetComponent<SelectPopupMole>().MoleHitHammer(myNumber);
