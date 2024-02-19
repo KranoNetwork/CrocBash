@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class ToggleMainMenu : MonoBehaviour
 {
+    /// <summary>
+    /// Toggles the MainMenu stuff on and off
+    /// </summary>
     // P R O P E R T I E S
     [SerializeField] List<GameObject> mainMenuGameObjects;
 
