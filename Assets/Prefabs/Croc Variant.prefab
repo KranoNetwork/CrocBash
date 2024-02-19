@@ -125,28 +125,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &4323936850944203322
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7781874854842839418}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41e95082e81d62f428cbfb559fe093cd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  selectMole: {fileID: 0}
-  gameController: {fileID: 0}
-  Player: {fileID: 0}
-  moveDistance: 5
-  moveSpeed: 0.2
-  randoLimitMax: 7
-  maxUpTime: 5
-  myNumber: 0
-  rb: {fileID: 9095442930155831779}
-  bonk: {fileID: 2698356432364527823}
 --- !u!114 &3886885053779191389
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,7 +138,49 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Tags:
-  - Moles
+  - Croc
+--- !u!114 &4323936850944203322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7781874854842839418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41e95082e81d62f428cbfb559fe093cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tags: {fileID: 0}
+  selectMole: {fileID: 0}
+  gameController: {fileID: 0}
+  Player: {fileID: 0}
+  moveDistance: 5
+  moveSpeed: 0.2
+  randoLimitMax: 7
+  maxUpTime: 5
+  myNumber: 0
+  rb: {fileID: 9095442930155831779}
+  bonk: {fileID: 2698356432364527823}
+--- !u!114 &6539669144532070287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7781874854842839418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ee7ba8b425b520479a8e30870f209a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  originalPosition: {x: 0, y: 0, z: 0}
+  moveDistance: 0
+  moveSpeed: 0
+  State: 0
+  downTimer: 0
+  maxUpTime: 0
+  playerTagName: Hammer
 --- !u!1001 &1792196141391865971
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -173,11 +193,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Croc Variant
       objectReference: {fileID: 0}
-    - target: {fileID: -9045506348268794820, guid: 6c17ae65aee5db94381509ccb2f544e9,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 00abfa159065b0448bee2b5ac487756a, type: 2}
     - target: {fileID: -4216859302048453862, guid: 6c17ae65aee5db94381509ccb2f544e9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -233,6 +248,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -9045506348268794820, guid: 6c17ae65aee5db94381509ccb2f544e9,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 00abfa159065b0448bee2b5ac487756a, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6c17ae65aee5db94381509ccb2f544e9, type: 3}
 --- !u!1 &7781874854842839418 stripped
