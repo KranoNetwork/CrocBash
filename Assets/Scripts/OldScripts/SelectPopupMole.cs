@@ -182,7 +182,7 @@ public class SelectPopupMole : MonoBehaviour
     }
 
 
-    void CountDown()
+    void CountDown() // time until we can start popping up two at a time
     {
         timeLeft -= Time.deltaTime;
         if (timeLeft <= 0)

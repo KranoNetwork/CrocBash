@@ -77,4 +77,9 @@ public class GameController : MonoBehaviour
         GameScene.SetActive(false);
         Debug.Log("CONTACT");
     }
+
+    public void IncreaseScore(int increase)
+    {
+        score += increase;
+    }
 }

@@ -21,10 +21,6 @@ public class CrocBehaviour : MonoBehaviour
     [SerializeField] float moveSpeed; //speed at which to move the croc up
     public CrocState State; //the croc state; replaces the bools: isHIt, isUp, and isMovingUp in the MoleController script
 
-    [Header("Timer")]
-    [SerializeField] Timer timer; // original MoleController used some rudimentary timer
-                                  // so I brought in this timer just in case, it has better functionality
-
     [Header("Audio")]
     [SerializeField] AudioSource hitSoundEffect; //stores bonk sfx
 
@@ -38,7 +34,6 @@ public class CrocBehaviour : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        timer = new Timer();
     }
     // Start is called before the first frame update
     void Start()
@@ -64,7 +59,7 @@ public class CrocBehaviour : MonoBehaviour
     }
 
     // C U S T O M  M E T H O D S
-    public void MoveUp()
+    public void MoveUp() // Replaces the PopUp() method from MoleController.cs
     {
         State = CrocState.IsMovingUp;
         moveDistance += moveSpeed * Time.deltaTime;
@@ -80,8 +75,9 @@ public class CrocBehaviour : MonoBehaviour
 
     public void Hit()
     {
-        if (State == CrocState.IsDown)
+        if (State == CrocState.IsUp)
         {
+            State = CrocState.IsHit;
             rb.isKinematic = false;
             MoveDown();
             // reset timer
@@ -90,4 +86,12 @@ public class CrocBehaviour : MonoBehaviour
             //let the manager know that it can select a new croc
         }
     }
+
+    public void SetCrocState(CrocState state)
+    {
+        State = state;
+    }
+
+    // the original MoleController.cs had timers in it that weren't actually 
+    // being used, so that logic (the TickTimers() method) has been removed
 }
