@@ -50,11 +50,42 @@ public class CrocBehaviour : MonoBehaviour
     // C O L L I S I O N
     public void OnCollisionEnter(Collision collision)
     {
+        // used for making sure the things are hit from above and not from the side
+        Vector3 _tempRelativePosition;
+
         if (TagManager.CompareTags(collision.gameObject, playerTagName))
         {
-            // hit behavior
-            Debug.Log("Hit!");
-            
+            _tempRelativePosition = transform.InverseTransformPoint(collision.transform.position);
+            if (_tempRelativePosition.y > 0)
+            {
+                // hit behavior
+                Debug.Log("Hit!");
+                Hit();
+            }
+
+            // logic for making sure the croc doesn't get hit from the side when it's down
+            if (_tempRelativePosition.y < 1)
+            {
+                //Debug.Log("The object is to the Below");
+                //MoveDown();
+                rb.isKinematic = true;
+            }
+            if (_tempRelativePosition.x > 0)
+            {
+                //Debug.Log("The object is to the right");
+                rb.isKinematic = true;
+            }
+            if (_tempRelativePosition.x < 0 )
+            {
+                //Debug.Log("The object is to the left");
+                rb.isKinematic = true;
+            }
+            if (_tempRelativePosition.z > 0)
+            {
+                //Debug.Log("The object is in front.");
+                rb.isKinematic = true;
+            }
+
         }
     }
 
@@ -77,6 +108,7 @@ public class CrocBehaviour : MonoBehaviour
     {
         if (State == CrocState.IsUp)
         {
+            
             State = CrocState.IsHit;
             rb.isKinematic = false;
             MoveDown();

@@ -123,7 +123,7 @@ public class MoleController : MonoBehaviour
 
     }
 
-    public void OnCollisionEnter(Collision other) // [TD] ASK ABOUT THIS METHOD!!
+    public void OnCollisionEnter(Collision other) 
     {
 
         if (other.gameObject.CompareTags("Moles") && this.gameObject.CompareTags("SelectedMole"))
