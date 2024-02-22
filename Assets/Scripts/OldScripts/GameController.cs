@@ -14,8 +14,8 @@ using Liminal.SDK.VR.Input;
 
 public class GameController : MonoBehaviour
 {
-    [SerializeField] GameObject MainMenuScene;
-    [SerializeField] GameObject GameScene;
+    //[SerializeField] GameObject MainMenuScene;
+    //[SerializeField] GameObject GameScene;
 
 
     public int totalNumOfEnemies = 0; //total number of enemies capable of spawing at once
@@ -53,7 +53,7 @@ public class GameController : MonoBehaviour
         }
 		else
 		{
-            gameEnd();
+            //gameEnd();
 		}
         scoreTxt.text = score.ToString();
         if (time <= 0)
@@ -73,9 +73,9 @@ public class GameController : MonoBehaviour
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //reload the same scene from start
         // go back to main menu screen
         
-        MainMenuScene.SetActive(true);
-        GameScene.SetActive(false);
-        Debug.Log("CONTACT");
+        //MainMenuScene.SetActive(true);
+        //GameScene.SetActive(false);
+        //Debug.Log("CONTACT");
     }
 
     public void IncreaseScore(int increase)
