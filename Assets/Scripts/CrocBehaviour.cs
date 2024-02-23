@@ -96,6 +96,7 @@ public class CrocBehaviour : MonoBehaviour
         moveDistance += moveSpeed * Time.deltaTime;
         moveDistance = Mathf.Clamp01(moveDistance) + moveDistance;
         transform.position = Vector3.Lerp(this.transform.position, this.transform.position + new Vector3(0, 2, 0), moveDistance);
+        State = CrocState.IsUp;
     }
 
     public void MoveDown()

@@ -98,13 +98,16 @@ public class CrocManager : MonoBehaviour
         bool _run = true;
         while (_run)
         {
+            Debug.Log("While started");
             if (CheckActiveCrocs())
             {
                 SelectCrocs();
+                Debug.Log("if started");
             }
             else
             {
                 _run = false;
+                Debug.Log("else started");
             }
         }
     }
@@ -142,6 +145,7 @@ public class CrocManager : MonoBehaviour
                 _randomNum = UnityEngine.Random.Range(0, Crocs.Length); 
                 _tempCBref = Crocs[_randomNum].GetComponent<CrocBehaviour>(); // gets the CB script for the croc that is selected
                 if (_tempCBref == null) // makes sure that script isn't null
+                    Debug.Log("THIS IS THE TEMPCBREF YOOOOOO SKRT SKRT:     " + _tempCBref.ToString());
                     break;
             } while (_tempCBref.State == CrocState.IsUp); // do those things will the croc is up/selected
 
@@ -159,6 +163,7 @@ public class CrocManager : MonoBehaviour
 
         foreach (GameObject croc in Crocs)
         {
+            Debug.Log("FOREACH STARTED");
             CrocBehaviour tempCBref = croc.GetComponent<CrocBehaviour>();
 
             if (tempCBref != null ) // making sure there is a value
@@ -167,6 +172,8 @@ public class CrocManager : MonoBehaviour
                     temp += 1;
             }
         }
+
+        Debug.Log("TEMP VALUE RAHHHHHHHH: " + temp);
 
         if (temp < AmountOfPopUps)
         {
