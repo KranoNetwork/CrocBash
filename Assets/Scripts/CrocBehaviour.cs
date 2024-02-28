@@ -1,7 +1,13 @@
-﻿using System.Collections;
+﻿using Google.ProtocolBuffers.Collections;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net.Sockets;
+using System.Xml.Linq;
 using UnityEngine;
-using UnityEngine.Rendering;
+using UnityEngine.UI;
+using static Valve.VR.SteamVR_TrackedObject;
 
 public enum CrocState { IsDown, IsMovingUp, IsUp, IsHit }
 public class CrocBehaviour : MonoBehaviour
@@ -120,9 +126,15 @@ public class CrocBehaviour : MonoBehaviour
         }
     }
 
-    public void SetCrocState(CrocState state)
+    public void SetCrocState(CrocState state) //updates the croc's state 
     {
         State = state;
+    }
+
+    public void Stop()
+    {
+        this.transform.position = originalPosition;
+        this.State = CrocState.IsDown;
     }
 
     // the original MoleController.cs had timers in it that weren't actually 

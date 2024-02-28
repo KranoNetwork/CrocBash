@@ -59,7 +59,6 @@ public class GameController : MonoBehaviour
         if (time <= 0)
         {
             isTimer = false;
-
         }
     }
     void DisplayTime()

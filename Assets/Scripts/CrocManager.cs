@@ -1,6 +1,13 @@
-﻿using System.Collections;
+﻿using Google.ProtocolBuffers.Collections;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net.Sockets;
+using System.Xml.Linq;
 using UnityEngine;
+using UnityEngine.UI;
+using static Valve.VR.SteamVR_TrackedObject;
 
 public class CrocManager : MonoBehaviour
 {
@@ -44,7 +51,7 @@ public class CrocManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartGame();
+       
     }
 
     // Update is called once per frame
@@ -73,14 +80,18 @@ public class CrocManager : MonoBehaviour
         PopMoreCrocTimer.StartTimer(Time.time, numOfSecsBeforeMoreCrocsPopUpAtOnce);
         SelectNextCroc();
     }
+    public void OnRoundEnd()
+    {
+        StopCrocs();
+    }
+
+
     public void OnCrocHit() // replaces MoleHitHammer(int i)
     {
         // the croc already plays sound so this doesn't need too
         // the croc already updates it's state so this does't need to do it
 
-
         gameController.IncreaseScore(1); 
-
 
         // select the next croc to pop up
         SelectNextCroc();
@@ -216,6 +227,17 @@ public class CrocManager : MonoBehaviour
                 AmountOfPopUps++;
             }
             PopMoreCrocTimer.StartTimer(Time.time, numOfSecsBeforeMoreCrocsPopUpAtOnce);
+        }
+    }
+
+    void StopCrocs()
+    {
+        CrocBehaviour _tempCB;
+        foreach(GameObject croc in Crocs)
+        {
+            _tempCB = croc.gameObject.GetComponent<CrocBehaviour>();
+            if (_tempCB != null)
+                croc.gameObject.GetComponent<CrocBehaviour>().Stop();
         }
     }
 

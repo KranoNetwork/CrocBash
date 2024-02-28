@@ -1,4 +1,4 @@
-﻿public enum TimerState { Started, Running, Ended }
+﻿public enum TimerState { Off, Started, Running, Ended }
 public class Timer
 {
     // P R O P E R T I E S
@@ -15,10 +15,10 @@ public class Timer
 
 
     // M E T H O D S
-    public void StartTimer(float _currentTime, float _durationInMiliseconds)
+    public void StartTimer(float _currentTime, float _durationInSeconds)
     {
         CurrentTime = _currentTime;
-        EndTime = _durationInMiliseconds + _currentTime;
+        EndTime = _durationInSeconds + _currentTime;
 
         State = TimerState.Started;
     }
@@ -40,7 +40,7 @@ public class Timer
     public void ResetTimer()
     {
 
-        State = TimerState.Ended;
+        State = TimerState.Off;
     }
 
     private float SecondsToMilliseconds(float seconds)
