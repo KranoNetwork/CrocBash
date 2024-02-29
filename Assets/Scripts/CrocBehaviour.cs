@@ -25,7 +25,7 @@ public class CrocBehaviour : MonoBehaviour
     [SerializeField] Vector3 originalPosition; // original pos for putting the croc back down
     [SerializeField] float moveDistance; //distance to move the croc up
     [SerializeField] float moveSpeed; //speed at which to move the croc up
-    public CrocState State; //the croc state; replaces the bools: isHIt, isUp, and isMovingUp in the MoleController script
+    public CrocState State; //the croc state; replaces the bools: isHit, isUp, and isMovingUp in the MoleController script
 
     [Header("Audio")]
     [SerializeField] AudioSource hitSoundEffect; //stores bonk sfx
@@ -33,7 +33,7 @@ public class CrocBehaviour : MonoBehaviour
     [Header("Referemces")]
     [SerializeField] string playerTagName; // the tag the player has (through the liminal tag package)
     Rigidbody rb; // the rigidbody attached to the gameObj this script is attached to
-    [SerializeField] CrocManager crocManager;
+    [SerializeField] CrocManager crocManager; //[TD] - dependency
 
 
 
@@ -126,8 +126,8 @@ public class CrocBehaviour : MonoBehaviour
             MoveDown();
             // reset timer
             hitSoundEffect.Play();
-            //lets 
-            crocManager.OnCrocHit();
+            //lets croc manager know it's been it
+            crocManager.OnCrocHit(); // [TD] - dependency
         }
     }
 

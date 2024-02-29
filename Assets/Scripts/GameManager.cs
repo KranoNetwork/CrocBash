@@ -8,7 +8,6 @@ using UnityEngine.UI;
 using TMPro;
 using System.Xml.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 using static Valve.VR.SteamVR_TrackedObject;
 
 public class GameManager : MonoBehaviour
@@ -65,9 +64,9 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public void IncreaseScore(int _inscrease)
+    public void IncreaseScore(int _increase)
     {
-        Score += _inscrease;
+        Score += _increase;
     }
 
     void DisplayUITexts()
