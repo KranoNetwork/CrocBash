@@ -33,6 +33,7 @@ public class CrocBehaviour : MonoBehaviour
     [Header("Referemces")]
     [SerializeField] string playerTagName; // the tag the player has (through the liminal tag package)
     Rigidbody rb; // the rigidbody attached to the gameObj this script is attached to
+    [SerializeField] CrocManager crocManager;
 
 
 
@@ -40,6 +41,10 @@ public class CrocBehaviour : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+    }
+    void OnEnable()
+    {
+        originalPosition = transform.position;
     }
     // Start is called before the first frame update
     void Start()
@@ -121,8 +126,8 @@ public class CrocBehaviour : MonoBehaviour
             MoveDown();
             // reset timer
             hitSoundEffect.Play();
-            //update score
-            //let the manager know that it can select a new croc
+            //lets 
+            crocManager.OnCrocHit();
         }
     }
 
