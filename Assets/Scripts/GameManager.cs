@@ -27,10 +27,12 @@ public class GameManager : MonoBehaviour
     public GameObject EndUITextObjects;
     public TMP_Text EndScoreDisplay;
     public TMP_Text HighScoreDisplay;
+    public GameObject exitUi;
 
     [Header("Object References")]
     public CrocManager crocManager;
     public GameObject RestartThing;
+    public GameObject ExitThing;
 
     // U N I T Y  M E T H O D S
     void Awake()
@@ -50,6 +52,9 @@ public class GameManager : MonoBehaviour
     // M I S C  M E T H O D S
     public void StartGame()
     {
+        if (TimerLength == 0)
+            TimerLength = 15;
+
         if (EndUITextObjects.active)
         {
             EndUITextObjects.SetActive(false);
@@ -61,14 +66,19 @@ public class GameManager : MonoBehaviour
     public void EndRound()
     {
         crocManager.OnRoundEnd();
-        //RoundTimer.ResetTimer();
+        RoundTimer = new Timer();
         RestartThing.SetActive(true);
-        SetHighScore();
+        ExitThing.SetActive(true);
+        exitUi.SetActive(true);
+        //SetHighScore();
         SetEndUiContent();
     }
 
     public void RestartGame()
     {
+        ExitThing.SetActive(false);
+        exitUi.SetActive(false);
+
         Score = 0;
         StartGame();
     }
@@ -92,7 +102,7 @@ public class GameManager : MonoBehaviour
 
     void DisplayUITexts()
     {
-        float tempNum = Mathf.Round(TimerLength - RoundTimer.CurrentTime);
+        float tempNum = Mathf.Round(RoundTimer.EndTime - RoundTimer.CurrentTime);
         if (tempNum <= 0)
             tempNum = 0;
         TimeDisplay.text = tempNum.ToString();
@@ -107,7 +117,7 @@ public class GameManager : MonoBehaviour
     void SetEndUiContent()
     {
         EndUITextObjects.SetActive(true);
-        EndScoreDisplay.text = Score.ToString();
-        HighScoreDisplay.text = HighScore.ToString();
+        //EndScoreDisplay.text = Score.ToString();
+       // HighScoreDisplay.text = HighScore.ToString();
     }
 }

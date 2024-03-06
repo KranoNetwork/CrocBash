@@ -25,6 +25,7 @@ public class CrocBehaviour : MonoBehaviour
     [SerializeField] Vector3 originalPosition; // original pos for putting the croc back down
     [SerializeField] float moveDistance; //distance to move the croc up
     [SerializeField] float moveSpeed; //speed at which to move the croc up
+    private Vector3 ogScale;
     public CrocState State; //the croc state; replaces the bools: isHit, isUp, and isMovingUp in the MoleController script
 
     [Header("Audio")]
@@ -41,6 +42,7 @@ public class CrocBehaviour : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        ogScale = transform.localScale;
     }
     void OnEnable()
     {
@@ -104,9 +106,9 @@ public class CrocBehaviour : MonoBehaviour
     public void MoveUp() // Replaces the PopUp() method from MoleController.cs
     {
         State = CrocState.IsMovingUp;
-        moveDistance += moveSpeed * Time.deltaTime;
-        moveDistance = Mathf.Clamp01(moveDistance) + moveDistance;
-        transform.position = Vector3.Lerp(this.transform.position, this.transform.position + new Vector3(0, 2, 0), moveDistance);
+        //moveDistance += moveSpeed * Time.deltaTime;
+        //moveDistance = Mathf.Clamp01(moveDistance) + moveDistance;
+        transform.position = Vector3.Lerp(this.transform.position, this.transform.position + new Vector3(0, moveDistance, 0), moveSpeed);
         State = CrocState.IsUp;
     }
 
