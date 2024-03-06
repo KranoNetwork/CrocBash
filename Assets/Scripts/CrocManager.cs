@@ -33,7 +33,7 @@ public class CrocManager : MonoBehaviour
 
     [Header("References")]
     [SerializeField] public GameObject[] Crocs; // list of crocs for reference
-    [SerializeField] GameController gameController;
+    [SerializeField] GameManager gameManager;
 
     // U N I T  M E T H O D S 
     void Awake()
@@ -91,8 +91,9 @@ public class CrocManager : MonoBehaviour
         // the croc already plays sound so this doesn't need too
         // the croc already updates it's state so this does't need to do it
 
-        gameController.IncreaseScore(1); 
-
+        gameManager.IncreaseScore(1);
+        //gameManager.Score += 1;
+        //UnityEngine.Debug.Log("CM SCORE CHANGE: " +  gameManager.Score);
         // select the next croc to pop up
         SelectNextCroc();
     }
