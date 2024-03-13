@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Xml.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using Valve.VR;
 using static Valve.VR.SteamVR_TrackedObject;
 
 public class CrocManager : MonoBehaviour
@@ -25,6 +26,8 @@ public class CrocManager : MonoBehaviour
     [Header("Croc Management")]
     public bool CanSelectCroc; // looks to see if another croc can be selected
     List<GameObject> selectedCrocs; // for picking a croc and triggering it to move up; MAY NOT BE NEEDED IDK YET
+    int previousCrocIndex; // for noting what the index of the previous croc was
+    int currentCrocIndex;
 
     [Header("Timer")]
     public Timer PopMoreCrocTimer; // timer for handling when to pop up the multiple crocs
@@ -124,10 +127,12 @@ public class CrocManager : MonoBehaviour
         }
     }
 
+    
     void SelectCrocs() // replaces MoleSelect() from SelectPopUpMole.cs
     {
         int _randomNum;
         CrocBehaviour _tempCBref;
+
         /* select a croc
 
         // if AmountOfPopUps != 0
@@ -159,11 +164,37 @@ public class CrocManager : MonoBehaviour
                 if (_tempCBref == null) // makes sure that script isn't null
                     Debug.Log("THIS IS THE TEMPCBREF YOOOOOO SKRT SKRT:     " + _tempCBref.ToString());
                     break;
-            } while (_tempCBref.State == CrocState.IsUp); // do those things will the croc is up/selected
+            } while (CheckCurrentCroc(_tempCBref, _randomNum)); // do those things while this method returns true
 
             Crocs[_randomNum].GetComponent<CrocBehaviour>().SetCrocState(CrocState.IsMovingUp);
             PopUp(Crocs[_randomNum]);
         }
+    }
+
+    bool CheckCurrentCroc(CrocBehaviour _tempCBref, int _indexNum)
+    {
+        /// <summary>
+        ///  Looks at the selected croc, 
+        ///  
+        ///  returns true if the CrocState is U 
+        ///  or if the crocs is the same as the previous croc
+        ///     (as is the same croc got selected)
+        ///  
+        /// </summary>
+
+        //sets index nums for comparring
+        previousCrocIndex = currentCrocIndex;
+        currentCrocIndex = _indexNum;
+
+        if (_tempCBref.State == CrocState.IsUp)
+        {
+            if (currentCrocIndex == previousCrocIndex)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public bool CheckActiveCrocs() // basically the same as CheckActiveMoles()
