@@ -8,16 +8,29 @@ public class ExitBehavior : MonoBehaviour
 {
     // P R O P E R T I E S
     public string PlayerTagName;
+    [SerializeField] EndToggle endToggle;
+
+    enum EndToggle { LiminalWay , UnityWay }
 
     public void OnCollisionEnter(Collision collision)
     {
         if ((TagManager.CompareTags(collision.gameObject, PlayerTagName)))
         {
-            EndGame();
+            switch (endToggle)
+            {
+                case EndToggle.LiminalWay:
+                    EndGameLiminalWay();
+                    break;
+
+                case EndToggle.UnityWay:
+                    EndGameUnityWay();
+                    break;
+            }
+            EndGameLiminalWay();
         }
     }
 
-    void EndGame() // the way liminal wants its ~eXpErIeNcEs~ to  be ended
+    void EndGameLiminalWay() // the way liminal wants its ~eXpErIeNcEs~ to  be ended
     {
         StartCoroutine(FadeExit(2f)); // starts coroutine
 
@@ -40,6 +53,11 @@ public class ExitBehavior : MonoBehaviour
             ExperienceApp.End(); //ends game
 
         }
+    }
+
+    void EndGameUnityWay()
+    {
+        Application.Quit();
     }
 
     
