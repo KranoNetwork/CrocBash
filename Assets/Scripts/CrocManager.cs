@@ -10,6 +10,7 @@ using UnityEngine.UI;
 using Valve.VR;
 using static Valve.VR.SteamVR_TrackedObject;
 
+public enum CrocMode { TransformMotion, AnimationMotion }
 public class CrocManager : MonoBehaviour
 {
     /// <summary>
@@ -28,6 +29,7 @@ public class CrocManager : MonoBehaviour
     List<GameObject> selectedCrocs; // for picking a croc and triggering it to move up; MAY NOT BE NEEDED IDK YET
     int previousCrocIndex; // for noting what the index of the previous croc was
     int currentCrocIndex;
+    public CrocMode CrocModeToggle;
 
     [Header("Timer")]
     public Timer PopMoreCrocTimer; // timer for handling when to pop up the multiple crocs

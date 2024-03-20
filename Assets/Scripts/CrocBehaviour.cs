@@ -10,6 +10,7 @@ using UnityEngine.UI;
 using static Valve.VR.SteamVR_TrackedObject;
 
 public enum CrocState { IsDown, IsMovingUp, IsUp, IsHit }
+
 public class CrocBehaviour : MonoBehaviour
 {
     /// <summary>
@@ -27,6 +28,7 @@ public class CrocBehaviour : MonoBehaviour
     [SerializeField] float moveSpeed; //speed at which to move the croc up
     private Vector3 ogScale;
     public CrocState State; //the croc state; replaces the bools: isHit, isUp, and isMovingUp in the MoleController script
+    public CrocMode CrocModeToggle;
 
     [Header("Audio")]
     [SerializeField] AudioSource hitSoundEffect; //stores bonk sfx
@@ -34,6 +36,8 @@ public class CrocBehaviour : MonoBehaviour
     [Header("Referemces")]
     [SerializeField] string playerTagName; // the tag the player has (through the liminal tag package)
     Rigidbody rb; // the rigidbody attached to the gameObj this script is attached to
+    [SerializeField] GameObject crocUp;
+    [SerializeField] GameObject crocDown;
     [SerializeField] CrocManager crocManager; //[TD] - dependency
 
 
@@ -51,13 +55,21 @@ public class CrocBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        SetCrocMode();
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+
+    // S E T  U P  M E T H O D S
+    void SetCrocMode() // for  toggling between the different modes of having the crocs pop up
+    {
+        if (crocManager != null)
+            this.CrocModeToggle = crocManager.CrocModeToggle;
     }
 
     // C O L L I S I O N
@@ -106,16 +118,44 @@ public class CrocBehaviour : MonoBehaviour
     public void MoveUp() // Replaces the PopUp() method from MoleController.cs
     {
         State = CrocState.IsMovingUp;
-        //moveDistance += moveSpeed * Time.deltaTime;
-        //moveDistance = Mathf.Clamp01(moveDistance) + moveDistance;
-        transform.position = Vector3.Lerp(this.transform.position, this.transform.position + new Vector3(0, moveDistance, 0), moveSpeed);
+        switch(CrocModeToggle)
+        {
+            case CrocMode.TransformMotion:
+                //moveDistance += moveSpeed * Time.deltaTime;
+                //moveDistance = Mathf.Clamp01(moveDistance) + moveDistance;
+                transform.position = Vector3.Lerp(this.transform.position, this.transform.position + new Vector3(0, moveDistance, 0), moveSpeed);
+                break;
+
+            case CrocMode.AnimationMotion:
+                MoveUpAnim();
+                break;
+        }
+        
         State = CrocState.IsUp;
+    }
+    private void MoveUpAnim()
+    {
+
     }
 
     public void MoveDown()
     {
         State = CrocState.IsDown;
-        transform.position = originalPosition;
+        switch (CrocModeToggle)
+        {
+            case CrocMode.TransformMotion:
+                transform.position = originalPosition;
+                break;
+
+            case CrocMode.AnimationMotion:
+                MoveDownAnim();
+                break;
+        }
+        
+    }
+    private void MoveDownAnim()
+    {
+
     }
 
     public void Hit()
@@ -143,6 +183,7 @@ public class CrocBehaviour : MonoBehaviour
         this.transform.position = originalPosition;
         this.State = CrocState.IsDown;
     }
+
 
     // the original MoleController.cs had timers in it that weren't actually 
     // being used, so that logic (the TickTimers() method) has been removed

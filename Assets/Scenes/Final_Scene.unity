@@ -1308,6 +1308,85 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 632018367}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &647990269
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 972793346}
+    m_Modifications:
+    - target: {fileID: -927199367670048503, guid: 932f8501e6577514487b15fa1ebe0d84,
+        type: 3}
+      propertyPath: m_Name
+      value: croc-down
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 932f8501e6577514487b15fa1ebe0d84,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6057140222963153312, guid: 932f8501e6577514487b15fa1ebe0d84,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 3bdea20d76c56324b876faccd620022b, type: 2}
+    - target: {fileID: -4216859302048453862, guid: 932f8501e6577514487b15fa1ebe0d84,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 932f8501e6577514487b15fa1ebe0d84,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 932f8501e6577514487b15fa1ebe0d84,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 932f8501e6577514487b15fa1ebe0d84,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 932f8501e6577514487b15fa1ebe0d84,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 932f8501e6577514487b15fa1ebe0d84,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 932f8501e6577514487b15fa1ebe0d84,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 932f8501e6577514487b15fa1ebe0d84,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 932f8501e6577514487b15fa1ebe0d84,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 932f8501e6577514487b15fa1ebe0d84,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 932f8501e6577514487b15fa1ebe0d84,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 932f8501e6577514487b15fa1ebe0d84, type: 3}
 --- !u!1 &650514484
 GameObject:
   m_ObjectHideFlags: 0
@@ -1789,6 +1868,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CanSelectCroc: 0
+  CrocModeToggle: 0
   numOfSecsBeforeMoreCrocsPopUpAtOnce: 0
   AmountOfPopUps: 0
   Crocs: []
@@ -2075,6 +2155,91 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!1001 &917667822
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 972793346}
+    m_Modifications:
+    - target: {fileID: -927199367670048503, guid: ef8dc5e808077a341a5fa01fe4eb90e3,
+        type: 3}
+      propertyPath: m_Name
+      value: croc-up
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: ef8dc5e808077a341a5fa01fe4eb90e3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: ef8dc5e808077a341a5fa01fe4eb90e3,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: ef8dc5e808077a341a5fa01fe4eb90e3,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: ef8dc5e808077a341a5fa01fe4eb90e3,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: ef8dc5e808077a341a5fa01fe4eb90e3,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: ef8dc5e808077a341a5fa01fe4eb90e3,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: ef8dc5e808077a341a5fa01fe4eb90e3,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: ef8dc5e808077a341a5fa01fe4eb90e3,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: ef8dc5e808077a341a5fa01fe4eb90e3,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: ef8dc5e808077a341a5fa01fe4eb90e3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: ef8dc5e808077a341a5fa01fe4eb90e3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: ef8dc5e808077a341a5fa01fe4eb90e3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6057140222963153312, guid: ef8dc5e808077a341a5fa01fe4eb90e3,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 9495c7a67504b9249b38af8b8ae6ef53, type: 2}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ef8dc5e808077a341a5fa01fe4eb90e3, type: 3}
+--- !u!4 &917667823 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: ef8dc5e808077a341a5fa01fe4eb90e3,
+    type: 3}
+  m_PrefabInstance: {fileID: 917667822}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &924855666
 GameObject:
   m_ObjectHideFlags: 0
@@ -2166,6 +2331,38 @@ Transform:
   m_Father: {fileID: 798806669}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 178.877, y: -0.000015258789, z: -0.000015258789}
+--- !u!1 &972793345
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 972793346}
+  m_Layer: 0
+  m_Name: Croc
+  m_TagString: Untagged
+  m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &972793346
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 972793345}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 8.85, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1817323406}
+  - {fileID: 917667823}
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1001873149
 GameObject:
   m_ObjectHideFlags: 0
@@ -3292,6 +3489,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CanSelectCroc: 0
+  CrocModeToggle: 0
   numOfSecsBeforeMoreCrocsPopUpAtOnce: 15
   AmountOfPopUps: 1
   Crocs:
@@ -3846,8 +4044,11 @@ MonoBehaviour:
   moveDistance: 0
   moveSpeed: 0
   State: 0
+  CrocModeToggle: 0
   hitSoundEffect: {fileID: 0}
   playerTagName: Hammer
+  crocUp: {fileID: 0}
+  crocDown: {fileID: 0}
   crocManager: {fileID: 856595638}
 --- !u!114 &1580922251
 MonoBehaviour:
@@ -4848,6 +5049,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1801995581}
   m_CullTransparentMesh: 0
+--- !u!4 &1817323406 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 932f8501e6577514487b15fa1ebe0d84,
+    type: 3}
+  m_PrefabInstance: {fileID: 647990269}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1879074781
 GameObject:
   m_ObjectHideFlags: 0
