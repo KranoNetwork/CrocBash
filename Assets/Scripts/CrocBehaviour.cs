@@ -25,8 +25,7 @@ public class CrocBehaviour : MonoBehaviour
     [Header("Movement")]
     [SerializeField] Vector3 originalPosition; // original pos for putting the croc back down
     [SerializeField] float moveDistance; //distance to move the croc up
-    [SerializeField] float moveSpeed; //speed at which to move the croc up
-    private Vector3 ogScale;
+    [SerializeField] float moveSpeed = 0.1f; //speed at which to move the croc up
     public CrocState State; //the croc state; replaces the bools: isHit, isUp, and isMovingUp in the MoleController script
     public CrocMode CrocModeToggle;
 
@@ -46,11 +45,12 @@ public class CrocBehaviour : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        ogScale = transform.localScale;
     }
     void OnEnable()
     {
         originalPosition = transform.position;
+        crocUp.SetActive(false);
+        crocDown.SetActive(false);
     }
     // Start is called before the first frame update
     void Start()
@@ -61,7 +61,7 @@ public class CrocBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        this.rb.velocity = Vector3.zero;
     }
 
 
@@ -100,7 +100,7 @@ public class CrocBehaviour : MonoBehaviour
                 //Debug.Log("The object is to the right");
                 rb.isKinematic = true;
             }
-            if (_tempRelativePosition.x < 0 )
+            if (_tempRelativePosition.x < 0)
             {
                 //Debug.Log("The object is to the left");
                 rb.isKinematic = true;
@@ -135,7 +135,9 @@ public class CrocBehaviour : MonoBehaviour
     }
     private void MoveUpAnim()
     {
-
+        this.crocUp.SetActive(true);
+        //transform.position = Vector3.Lerp(this.transform.position, this.transform.position + new Vector3(0, moveDistance, 0), moveSpeed);
+        Move(MoveDirection.Up, moveSpeed);
     }
 
     public void MoveDown()
@@ -155,9 +157,42 @@ public class CrocBehaviour : MonoBehaviour
     }
     private void MoveDownAnim()
     {
-
+        this.crocUp.SetActive(false);
+        this.crocDown.SetActive(true);
+        Move(MoveDirection.Down, moveSpeed);
     }
+    private enum MoveDirection { Up, Down }
+    private void Move(MoveDirection direction, float speed)
+    {
+        Vector3 targetPos = originalPosition;
+        switch (direction)
+        {
+            case MoveDirection.Up:
+                targetPos.y += moveDistance;
+                break;
 
+            case MoveDirection.Down:
+                speed = -speed;
+                targetPos = originalPosition;
+                break;
+        }
+        int whileLoopCounter = 0;
+        while (this.transform.position.y <= targetPos.y || whileLoopCounter < 10) // while the position.y <= the target pos.y (or the while has 
+        {
+            whileLoopCounter++;
+            this.transform.position += new Vector3(0, speed, 0);
+        }
+        switch (direction)
+        {
+            case MoveDirection.Up:
+                this.transform.position = targetPos;
+                break;
+
+            case MoveDirection.Down:
+                this.transform.position = originalPosition;
+                break;
+        }
+    }
     public void Hit()
     {
         if (State == CrocState.IsUp)
@@ -180,8 +215,18 @@ public class CrocBehaviour : MonoBehaviour
 
     public void Stop()
     {
-        this.transform.position = originalPosition;
-        this.State = CrocState.IsDown;
+        switch(CrocModeToggle)
+        {
+            case CrocMode.TransformMotion:
+                this.transform.position = originalPosition;
+                this.State = CrocState.IsDown;
+                break;
+
+            case CrocMode.AnimationMotion:
+
+                break;
+        }
+        
     }
 
 
