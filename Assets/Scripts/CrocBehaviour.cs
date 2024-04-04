@@ -74,6 +74,9 @@ public class CrocBehaviour : MonoBehaviour
         // used for making sure the things are hit from above and not from the side
         Vector3 _tempRelativePosition;
 
+        //if (collision.gameObject != null)
+        //    UnityEngine.Debug.Log($"{this.name} collided with {collision.gameObject.name}");
+
         if (TagManager.CompareTags(collision.gameObject, playerTagName))
         {
             _tempRelativePosition = transform.InverseTransformPoint(collision.transform.position);
