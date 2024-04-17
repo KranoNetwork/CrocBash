@@ -1,66 +1,112 @@
-﻿using Google.ProtocolBuffers.Collections;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Sockets;
 using UnityEngine.UI;
 using TMPro;
-using System.Xml.Linq;
 using UnityEngine;
 using static Valve.VR.SteamVR_TrackedObject;
 
 public class GameManager : MonoBehaviour
 {
     // P R O P E R T I E S
+    [Header("State Management")]
+    [SerializeField] private GameStates State;
+
     [Header("Score Management")]
-    public float TimerLength;
+    [SerializeField] float StartTimerLength;
+    private Timer IntroTimer;
+    [SerializeField] float RoundTimerLength;
     public Timer RoundTimer;
     public int Score = 0;
     public int HighScore = 0;
-    
+
 
     [Header("UI References")]
-    public TMP_Text TimeDisplay;
-    public TMP_Text ScoreText;
+    [SerializeField] private GameObject IntroUIObject;
+    [SerializeField] private TMP_Text IntroTimerDiplay;
 
-    public GameObject EndUITextObjects;
-    public TMP_Text EndScoreDisplay;
-    public TMP_Text HighScoreDisplay;
-    public GameObject exitUi;
+    [SerializeField] private GameObject GamePlayUiObject;
+    [SerializeField] TMP_Text TimeDisplay;
+    [SerializeField] TMP_Text ScoreText;
+
+    [SerializeField] private GameObject EndUITextObjects;
+    [SerializeField] private TMP_Text EndScoreDisplay;
+    [SerializeField] private TMP_Text HighScoreDisplay;
 
     [Header("Object References")]
-    public CrocManager crocManager;
-    public GameObject RestartThing;
-    public GameObject ExitThing;
+    [SerializeField] private CrocManager crocManager;
+    [SerializeField] private GameObject RestartThing;
+    [SerializeField] private GameObject ExitThing;
+
+    private enum GameStates { Starting, Playing, Ending }
 
     // U N I T Y  M E T H O D S
     void Awake()
     {
+        State = GameStates.Starting;
+        IntroTimer = new Timer();
         RoundTimer = new Timer();
+
+        GamePlayUiObject.SetActive(false);
     }
     void Start()
     {
-        StartGame();
+        StartIntro();
     }
     void Update()
     {
-        CheckTimer();
-        DisplayUITexts();
+        switch (State)
+        {
+            case GameStates.Starting:
+                PlayIntro();
+                break;
+
+            case GameStates.Playing:
+                UpdateGamePlay();
+                break;
+
+            case GameStates.Ending:
+                // game end behavior
+                break;
+        }
     }
 
     // M I S C  M E T H O D S
-    public void StartGame()
+    private void StartIntro()
     {
-        if (TimerLength == 0)
-            TimerLength = 15;
+        IntroTimer.StartTimer(Time.time, StartTimerLength);
+        IntroUIObject.SetActive(true);
 
-        if (EndUITextObjects.active)
+    }
+    private void PlayIntro()
+    {
+        DisplayIntroUITexts();
+        CheckIntroTimer();
+    }
+    private void EndIntro()
+    {
+        new WaitForSeconds(1);
+        IntroUIObject.SetActive(false);
+        IntroTimer.State = TimerState.Off;
+    }
+    private void StartGamePlay()
+    {
+        GamePlayUiObject?.SetActive(true);
+        if (RoundTimerLength == 0)
+            RoundTimerLength = 15;
+
+        if (EndUITextObjects.activeSelf)
         {
             EndUITextObjects.SetActive(false);
         }
-        RoundTimer.StartTimer(Time.time, TimerLength);
+        RoundTimer.StartTimer(Time.time, RoundTimerLength);
         crocManager.StartGame();
+    }
+    private void UpdateGamePlay()
+    {
+        CheckGameplayTimer();
+        DisplayGameplayUITexts();
     }
 
     public void EndRound()
@@ -69,7 +115,6 @@ public class GameManager : MonoBehaviour
         RoundTimer = new Timer();
         RestartThing.SetActive(true);
         ExitThing.SetActive(true);
-        exitUi.SetActive(true);
         //SetHighScore();
         SetEndUiContent();
     }
@@ -77,36 +122,62 @@ public class GameManager : MonoBehaviour
     public void RestartGame()
     {
         ExitThing.SetActive(false);
-        exitUi.SetActive(false);
 
         Score = 0;
-        StartGame();
+        StartGamePlay();
     }
 
-    void CheckTimer()
+    void CheckGameplayTimer()
     {
         RoundTimer.UpdateTimer(Time.time);
 
         if (RoundTimer.State == TimerState.Ended)
         {
+            State = GameStates.Ending;
             EndRound();
         }
     }
-
+    void CheckIntroTimer()
+    {
+        IntroTimer.UpdateTimer(Time.time);
+        
+        if (IntroTimer.State == TimerState.Ended)
+        {
+            State = GameStates.Playing;
+            EndIntro();
+            StartGamePlay();
+        }
+    }
 
     public void IncreaseScore(int _increase)
     {
         Score += _increase;
-        UnityEngine.Debug.Log("METHOD SCORE: " +  Score);
+        //UnityEngine.Debug.Log("METHOD SCORE: " +  Score);
     }
 
-    void DisplayUITexts()
+    void DisplayGameplayUITexts()
     {
         float tempNum = Mathf.Round(RoundTimer.EndTime - RoundTimer.CurrentTime);
         if (tempNum <= 0)
             tempNum = 0;
         TimeDisplay.text = tempNum.ToString();
         ScoreText.text = Score.ToString();
+    }
+    void DisplayIntroUITexts()
+    {
+
+        if (IntroTimer.CurrentTime >= IntroTimer.EndTime - 5) //only show the count down to start time if there are 5 seconds left on the clock
+        {
+            float tempNum = Mathf.Round(IntroTimer.EndTime - IntroTimer.CurrentTime);
+            if (tempNum <= 0)
+                tempNum = 0;
+
+            IntroTimerDiplay.text = tempNum.ToString();
+        }
+        else { IntroTimerDiplay.text = string.Empty; }
+
+
+        
     }
 
     void SetHighScore()
@@ -118,6 +189,6 @@ public class GameManager : MonoBehaviour
     {
         EndUITextObjects.SetActive(true);
         //EndScoreDisplay.text = Score.ToString();
-       // HighScoreDisplay.text = HighScore.ToString();
+        // HighScoreDisplay.text = HighScore.ToString();
     }
 }
