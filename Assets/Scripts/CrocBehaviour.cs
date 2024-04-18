@@ -27,12 +27,13 @@ public class CrocBehaviour : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] AudioSource hitSoundEffect; //stores bonk sfx
+    [SerializeField] AudioSource spawnSoundEffect; //stores bonk sfx
 
-    [Header("Referemces")]
+    [Header("References")]
     [SerializeField] string playerTagName; // the tag the player has (through the liminal tag package)
     Rigidbody rb; // the rigidbody attached to the gameObj this script is attached to
-    [SerializeField] GameObject crocUp;
-    [SerializeField] GameObject crocDown;
+    //[SerializeField] GameObject crocUp;
+    //[SerializeField] GameObject crocDown;
     [SerializeField] CrocManager crocManager; //[TD] - dependency
 
 
@@ -45,8 +46,8 @@ public class CrocBehaviour : MonoBehaviour
     void OnEnable()
     {
         originalPosition = transform.position;
-        crocUp.SetActive(false);
-        crocDown.SetActive(false);
+        //crocUp.SetActive(false);
+        //crocDown.SetActive(false);
     }
     // Start is called before the first frame update
     void Start()
@@ -58,6 +59,11 @@ public class CrocBehaviour : MonoBehaviour
     void Update()
     {
         this.rb.velocity = Vector3.zero;
+
+        if (State == CrocState.IsUp)
+        {
+            this.transform.position = originalPosition + new Vector3(0, moveDistance, 0);
+        }
     }
 
 
@@ -117,6 +123,7 @@ public class CrocBehaviour : MonoBehaviour
     public void MoveUp() // Replaces the PopUp() method from MoleController.cs
     {
         State = CrocState.IsMovingUp;
+        spawnSoundEffect.Play();
         switch(CrocModeToggle)
         {
             case CrocMode.TransformMotion:
@@ -134,7 +141,7 @@ public class CrocBehaviour : MonoBehaviour
     }
     private void MoveUpAnim()
     {
-        this.crocUp.SetActive(true);
+        //this.crocUp.SetActive(true);
         //transform.position = Vector3.Lerp(this.transform.position, this.transform.position + new Vector3(0, moveDistance, 0), moveSpeed);
         Move(MoveDirection.Up, moveSpeed);
     }
@@ -156,8 +163,8 @@ public class CrocBehaviour : MonoBehaviour
     }
     private void MoveDownAnim()
     {
-        this.crocUp.SetActive(false);
-        this.crocDown.SetActive(true);
+        //this.crocUp.SetActive(false);
+        //this.crocDown.SetActive(true);
         Move(MoveDirection.Down, moveSpeed);
     }
     private enum MoveDirection { Up, Down }

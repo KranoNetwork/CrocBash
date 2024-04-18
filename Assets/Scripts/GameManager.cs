@@ -31,13 +31,17 @@ public class GameManager : MonoBehaviour
     [SerializeField] TMP_Text ScoreText;
 
     [SerializeField] private GameObject EndUITextObjects;
-    [SerializeField] private TMP_Text EndScoreDisplay;
-    [SerializeField] private TMP_Text HighScoreDisplay;
+    //[SerializeField] private TMP_Text EndScoreDisplay;
+    //[SerializeField] private TMP_Text HighScoreDisplay;
+
+    [Header("Audio Refs")]
+    [SerializeField] private AudioSource startRoundSFX;
+    [SerializeField] private AudioSource endRoundSFX;
 
     [Header("Object References")]
     [SerializeField] private CrocManager crocManager;
-    [SerializeField] private GameObject RestartThing;
-    [SerializeField] private GameObject ExitThing;
+    //[SerializeField] private GameObject RestartThing;
+    //[SerializeField] private GameObject ExitThing;
 
     private enum GameStates { Starting, Playing, Ending }
 
@@ -86,7 +90,8 @@ public class GameManager : MonoBehaviour
     }
     private void EndIntro()
     {
-        new WaitForSeconds(1);
+        startRoundSFX.Play();
+        new WaitForSeconds(3);
         IntroUIObject.SetActive(false);
         IntroTimer.State = TimerState.Off;
     }
@@ -113,15 +118,16 @@ public class GameManager : MonoBehaviour
     {
         crocManager.OnRoundEnd();
         RoundTimer = new Timer();
-        RestartThing.SetActive(true);
-        ExitThing.SetActive(true);
+        //RestartThing.SetActive(true);
+        //ExitThing.SetActive(true);
         //SetHighScore();
+        endRoundSFX.Play();
         SetEndUiContent();
     }
 
     public void RestartGame()
     {
-        ExitThing.SetActive(false);
+        //ExitThing.SetActive(false);
 
         Score = 0;
         StartGamePlay();
