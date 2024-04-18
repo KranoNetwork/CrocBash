@@ -190,10 +190,11 @@ public class CrocManager : MonoBehaviour
 
         if (_tempCBref.State == CrocState.IsUp)
         {
-            if (currentCrocIndex == previousCrocIndex)
-            {
-                return true;
-            }
+            return true;
+        }
+        else if (currentCrocIndex == previousCrocIndex)
+        {
+            return true;
         }
 
         return false;

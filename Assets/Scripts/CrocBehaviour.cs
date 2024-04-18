@@ -25,6 +25,11 @@ public class CrocBehaviour : MonoBehaviour
     public CrocState State; //the croc state; replaces the bools: isHit, isUp, and isMovingUp in the MoleController script
     public CrocMode CrocModeToggle;
 
+    [Header("Animation")]
+    [SerializeField] Animator animator;
+    private Transform originalTransform;
+    private Transform upTransform;
+
     [Header("Audio")]
     [SerializeField] AudioSource hitSoundEffect; //stores bonk sfx
     [SerializeField] AudioSource spawnSoundEffect; //stores bonk sfx
@@ -42,10 +47,13 @@ public class CrocBehaviour : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
     }
     void OnEnable()
     {
+        //originalTransform = upTransform = transform;
         originalPosition = transform.position;
+        //upTransform.position = originalPosition + new Vector3(0, moveDistance, 0);
         //crocUp.SetActive(false);
         //crocDown.SetActive(false);
     }
@@ -63,6 +71,8 @@ public class CrocBehaviour : MonoBehaviour
         if (State == CrocState.IsUp)
         {
             this.transform.position = originalPosition + new Vector3(0, moveDistance, 0);
+            //this.transform.position = upTransform.position;
+            //this.transform.rotation = upTransform.rotation;
         }
     }
 
@@ -129,6 +139,7 @@ public class CrocBehaviour : MonoBehaviour
             case CrocMode.TransformMotion:
                 //moveDistance += moveSpeed * Time.deltaTime;
                 //moveDistance = Mathf.Clamp01(moveDistance) + moveDistance;
+                animator.SetTrigger("MoveUp");
                 transform.position = Vector3.Lerp(this.transform.position, this.transform.position + new Vector3(0, moveDistance, 0), moveSpeed);
                 break;
 

@@ -193,6 +193,7 @@ public class GameManager : MonoBehaviour
     }
     void SetEndUiContent()
     {
+        GamePlayUiObject.SetActive(false);
         EndUITextObjects.SetActive(true);
         //EndScoreDisplay.text = Score.ToString();
         // HighScoreDisplay.text = HighScore.ToString();
