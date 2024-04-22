@@ -47,7 +47,7 @@ public class CrocBehaviour : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        animator = GetComponent<Animator>();
+        animator = GetComponentInChildren<Animator>();
     }
     void OnEnable()
     {
@@ -163,6 +163,7 @@ public class CrocBehaviour : MonoBehaviour
         switch (CrocModeToggle)
         {
             case CrocMode.TransformMotion:
+                
                 transform.position = originalPosition;
                 break;
 
@@ -214,7 +215,7 @@ public class CrocBehaviour : MonoBehaviour
     {
         if (State == CrocState.IsUp)
         {
-            
+            animator.SetTrigger("MoveDown");
             State = CrocState.IsHit;
             rb.isKinematic = false;
             MoveDown();
