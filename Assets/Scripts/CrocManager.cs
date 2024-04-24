@@ -172,7 +172,7 @@ public class CrocManager : MonoBehaviour
                     break;
             } while (CheckCurrentCroc(_tempCBref, _randomNum)); // do those things while this method returns true
 
-            Crocs[_randomNum].GetComponent<CrocBehaviour>().SetCrocState(CrocState.IsMovingUp);
+            //Crocs[_randomNum].GetComponent<CrocBehaviour>().SetCrocState(CrocState.IsMovingUp);
             PopUp(Crocs[_randomNum]);
         }
     }
@@ -192,7 +192,9 @@ public class CrocManager : MonoBehaviour
         previousCrocIndex = currentCrocIndex;
         currentCrocIndex = _indexNum;
 
-        if (_tempCBref.State == CrocState.IsUp)
+        if (_tempCBref.State == CrocState.IsUp 
+            || _tempCBref.State == CrocState.IsMovingUp
+            || _tempCBref.State == CrocState.IsHit)
         {
             return true;
         }
