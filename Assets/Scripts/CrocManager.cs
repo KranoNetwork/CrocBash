@@ -102,6 +102,10 @@ public class CrocManager : MonoBehaviour
         // select the next croc to pop up
         SelectNextCroc();
     }
+    public void OnCrocDespawn()
+    {
+        SelectNextCroc();
+    }
 
     void SelectNextCroc() // replaces SelectNextMole()
     {

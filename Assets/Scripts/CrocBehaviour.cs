@@ -25,14 +25,20 @@ public class CrocBehaviour : MonoBehaviour
     public CrocState State; //the croc state; replaces the bools: isHit, isUp, and isMovingUp in the MoleController script
     public CrocMode CrocModeToggle;
 
+    [Header("Movement")]
+    Timer despawnTimer;
+    [SerializeField] float timeBeforeDespawnIfNotHit;
+
     [Header("Animation")]
     [SerializeField] Animator animator;
     private Transform originalTransform;
     private Transform upTransform;
 
     [Header("Audio")]
-    [SerializeField] AudioSource hitSoundEffect; //stores bonk sfx
-    [SerializeField] AudioSource spawnSoundEffect; //stores bonk sfx
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip[] hitSFX;
+    [SerializeField] AudioClip[] spawnSFX;
+    [SerializeField] AudioClip[] despawnSFX;
 
     [Header("References")]
     [SerializeField] string playerTagName; // the tag the player has (through the liminal tag package)
@@ -46,6 +52,7 @@ public class CrocBehaviour : MonoBehaviour
     // U N I T Y  M E T H O D S
     void Awake()
     {
+        despawnTimer = new Timer();
         rb = GetComponent<Rigidbody>();
         animator = GetComponentInChildren<Animator>();
     }
@@ -68,11 +75,48 @@ public class CrocBehaviour : MonoBehaviour
     {
         this.rb.velocity = Vector3.zero;
 
-        if (State == CrocState.IsUp)
+        //if (State == CrocState.IsUp)
+        //{
+
+        //    this.transform.position = originalPosition + new Vector3(0, moveDistance, 0);
+        //    //this.transform.position = upTransform.position;
+        //    //this.transform.rotation = upTransform.rotation;
+        //}
+
+        UpdateBasedOnState();
+        
+
+
+    }
+
+    void UpdateBasedOnState()
+    {
+        switch (State)
         {
-            this.transform.position = originalPosition + new Vector3(0, moveDistance, 0);
-            //this.transform.position = upTransform.position;
-            //this.transform.rotation = upTransform.rotation;
+            case CrocState.IsUp:
+                this.despawnTimer.UpdateTimer(Time.time);
+                this.transform.position = originalPosition + new Vector3(0, moveDistance, 0);
+                break;
+
+            case CrocState.IsDown:
+                this.transform.position = originalPosition;
+                break;
+        }
+    }
+
+    void UpdateBasedOnTimerState()
+    {
+        switch(despawnTimer.State)
+        {
+            case TimerState.Started:
+            case TimerState.Running:
+                //do nothing
+                break;
+
+            case TimerState.Off:
+            case TimerState.Ended:
+                Despawn();
+                break;
         }
     }
 
@@ -133,12 +177,13 @@ public class CrocBehaviour : MonoBehaviour
     public void MoveUp() // Replaces the PopUp() method from MoleController.cs
     {
         State = CrocState.IsMovingUp;
-        spawnSoundEffect.Play();
-        switch(CrocModeToggle)
+        audioSource.PlayOneShot(PickRandomSFXFromArray(spawnSFX));
+        switch (CrocModeToggle)
         {
             case CrocMode.TransformMotion:
                 //moveDistance += moveSpeed * Time.deltaTime;
                 //moveDistance = Mathf.Clamp01(moveDistance) + moveDistance;
+                despawnTimer.StartTimer(Time.time, timeBeforeDespawnIfNotHit);
                 animator.SetTrigger("MoveUp");
                 transform.position = Vector3.Lerp(this.transform.position, this.transform.position + new Vector3(0, moveDistance, 0), moveSpeed);
                 break;
@@ -165,6 +210,7 @@ public class CrocBehaviour : MonoBehaviour
             case CrocMode.TransformMotion:
                 
                 transform.position = originalPosition;
+                transform.position = Vector3.Lerp(transform.position, originalPosition, moveSpeed);
                 break;
 
             case CrocMode.AnimationMotion:
@@ -215,14 +261,27 @@ public class CrocBehaviour : MonoBehaviour
     {
         if (State == CrocState.IsUp)
         {
-            animator.SetTrigger("MoveDown");
+            animator.SetTrigger("Hit");
             State = CrocState.IsHit;
             rb.isKinematic = false;
             MoveDown();
             // reset timer
-            hitSoundEffect.Play();
+            audioSource.PlayOneShot(PickRandomSFXFromArray(hitSFX));
             //lets croc manager know it's been it
             crocManager.OnCrocHit(); // [TD] - dependency
+        }
+    }
+    private void Despawn()
+    {
+        if (State == CrocState.IsUp)
+        {
+            animator.SetTrigger("MoveDown");
+            rb.isKinematic = false;
+            MoveDown(); //sets state as well
+            // reset timer
+            audioSource.PlayOneShot(PickRandomSFXFromArray(despawnSFX));
+            //lets croc manager know the croc has despawned
+            crocManager.OnCrocDespawn(); // [TD] - dependency
         }
     }
 
@@ -247,6 +306,10 @@ public class CrocBehaviour : MonoBehaviour
         
     }
 
+    AudioClip PickRandomSFXFromArray(AudioClip[] audioClips)
+    {
+        return audioClips[UnityEngine.Random.Range(0, audioClips.Length)];
+    }
 
     // the original MoleController.cs had timers in it that weren't actually 
     // being used, so that logic (the TickTimers() method) has been removed

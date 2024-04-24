@@ -29,10 +29,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject GamePlayUiObject;
     [SerializeField] TMP_Text TimeDisplay;
     [SerializeField] TMP_Text ScoreText;
+    [SerializeField] TMP_Text EndScoreText;
 
     [SerializeField] private GameObject EndUITextObjects;
-    //[SerializeField] private TMP_Text EndScoreDisplay;
-    //[SerializeField] private TMP_Text HighScoreDisplay;
 
     [Header("Audio Refs")]
     [SerializeField] private AudioSource startRoundSFX;
@@ -40,8 +39,6 @@ public class GameManager : MonoBehaviour
 
     [Header("Object References")]
     [SerializeField] private CrocManager crocManager;
-    //[SerializeField] private GameObject RestartThing;
-    //[SerializeField] private GameObject ExitThing;
 
     private enum GameStates { Starting, Playing, Ending }
 
@@ -118,8 +115,6 @@ public class GameManager : MonoBehaviour
     {
         crocManager.OnRoundEnd();
         RoundTimer = new Timer();
-        //RestartThing.SetActive(true);
-        //ExitThing.SetActive(true);
         //SetHighScore();
         endRoundSFX.Play();
         SetEndUiContent();
@@ -195,7 +190,6 @@ public class GameManager : MonoBehaviour
     {
         GamePlayUiObject.SetActive(false);
         EndUITextObjects.SetActive(true);
-        //EndScoreDisplay.text = Score.ToString();
-        // HighScoreDisplay.text = HighScore.ToString();
+        EndScoreText.text = Score.ToString();
     }
 }
