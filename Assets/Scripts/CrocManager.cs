@@ -227,7 +227,7 @@ public class CrocManager : MonoBehaviour
 
         Debug.Log("TEMP VALUE RAHHHHHHHH: " + temp);
 
-        if (temp < AmountOfPopUps)
+        if (temp <= AmountOfPopUps)
         {
             return true;
         }
@@ -243,7 +243,7 @@ public class CrocManager : MonoBehaviour
 
         if (tempCBscript != null)
         {
-            _croc.GetComponent<CrocBehaviour>().MoveUp();
+            tempCBscript.GetComponent<CrocBehaviour>().MoveUp();
         }
     }
 

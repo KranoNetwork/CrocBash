@@ -23,8 +23,11 @@ public class CrocBehaviour : MonoBehaviour
     [SerializeField] float moveDistance; //distance to move the croc up
     [SerializeField] float moveSpeed = 0.1f; //speed at which to move the croc up
     public CrocState State; //the croc state; replaces the bools: isHit, isUp, and isMovingUp in the MoleController script
-    public CrocMode CrocModeToggle;
-    [SerializeField] private GameObject crocMesh;
+    public CrocMode CrocModeToggle; //debug feature
+    [SerializeField] private GameObject crocMesh; //ref to the mesh the animations play on
+
+    private enum CoroutineState { Off, Started, Running, Ended }
+    [SerializeField] private CoroutineState coroutineState; //for adjusting position after animation has finished playing
 
     [Header("Timer")]
     Timer despawnTimer; //timer for handling despawing if not hit
@@ -58,6 +61,8 @@ public class CrocBehaviour : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         animator = GetComponentInChildren<Animator>();
         audioSource = GetComponent<AudioSource>();
+
+        coroutineState = CoroutineState.Off; // making sure this is true out the gate
         
     }
     void OnEnable()
@@ -91,12 +96,18 @@ public class CrocBehaviour : MonoBehaviour
         {
             case CrocState.IsUp:
                 this.despawnTimer.UpdateTimer(Time.time); //updates timer
-                this.transform.position = originalPosition + new Vector3(0, moveDistance, 0); //corrects position to keep it from drifting 
+                if (animator.GetCurrentAnimatorStateInfo(0).IsName("Still")  //|| coroutineState == CoroutineState.Ended || coroutineState == CoroutineState.Off
+                    )
+                    this.transform.position = originalPosition + new Vector3(0, moveDistance, 0); //corrects position to keep it from drifting 
                 HandleSpawnRateIncrease();
                 break;
 
             case CrocState.IsDown:
-                this.transform.position = originalPosition; //corrects position to keep it from drifting 
+                if (animator.GetCurrentAnimatorStateInfo(0).IsName("Still")
+                   )
+                {
+                    this.transform.position = originalPosition; //corrects position to keep it from drifting 
+                }
                 break;
         }
     }
@@ -117,6 +128,8 @@ public class CrocBehaviour : MonoBehaviour
         switch(despawnTimer.State)
         {
             case TimerState.Off:
+                //crocMesh.SetActive(false);
+                break;
             case TimerState.Started:
             case TimerState.Running:
                 //do nothing
@@ -213,7 +226,7 @@ public class CrocBehaviour : MonoBehaviour
             case CrocMode.TransformMotion:
                 
                 transform.position = originalPosition;
-                transform.position = Vector3.Lerp(transform.position, originalPosition, moveSpeed);
+                //transform.position = Vector3.Lerp(transform.position, originalPosition, moveSpeed);
                 break;
 
             case CrocMode.AnimationMotion:
@@ -223,25 +236,46 @@ public class CrocBehaviour : MonoBehaviour
         
     }
     private enum MoveAnim { Up, Down, Hit }
+    IEnumerator PlayAnimationThenMove(string animationTriggerName, MoveAnim direction)
+    {
+        coroutineState = CoroutineState.Started;
+        //crocMesh.SetActive(true);
+        animator.SetTrigger(animationTriggerName);
+        coroutineState = CoroutineState.Running;
+        yield return new WaitForSeconds(3);
+
+        switch (direction)
+        {
+            case MoveAnim.Up:
+                this.transform.position = originalPosition 
+                    + new Vector3(0, moveDistance, 0); //corrects position to keep it from drifting 
+                break;
+
+            case MoveAnim.Down:
+            case MoveAnim.Hit:
+                transform.position = originalPosition;
+                //crocMesh.SetActive(false);
+                break;
+        }
+        coroutineState = CoroutineState.Ended;
+    }
     private void Move(MoveAnim direction)
     {
         switch (direction)
         {
             case MoveAnim.Up:
-                crocMesh.SetActive(true);
-                animator.SetTrigger("MoveUp");
+                despawnTimer.StartTimer(Time.time, timeBeforeDespawnIfNotHit);
+                StartCoroutine(PlayAnimationThenMove("MoveUp", MoveAnim.Up));
                 break;
 
             case MoveAnim.Down:
                 despawnTimer.ResetTimer();
-                animator.SetTrigger("MoveDown");
-                crocMesh.SetActive(false);
+                StartCoroutine(PlayAnimationThenMove("MoveDown", MoveAnim.Down));
                 break;
 
             case MoveAnim.Hit:
                 despawnTimer.ResetTimer();
-                animator.SetTrigger("Hit");
-                crocMesh.SetActive(false);
+                StartCoroutine(PlayAnimationThenMove("MoveUp", MoveAnim.Up));
                 break;
         }
     }
@@ -277,21 +311,18 @@ public class CrocBehaviour : MonoBehaviour
     {
         if (State == CrocState.IsUp)
         {
-            
-            new WaitForSeconds(3);
             rb.isKinematic = false;
             
             switch(CrocModeToggle)
             {
                 case CrocMode.TransformMotion:
-                    animator.SetTrigger("MoveDown");
                     MoveDown(); 
                     break;
 
                 case CrocMode.AnimationMotion:
-                    //transform.position = originalPosition;  //does smth weird -> sometimes moves them to the side :p
-                    Move(MoveAnim.Down);
-                  break;
+                    //transform.position = originalPosition;  //does smth weird -> sometimes moves them to the side :P
+                    StartCoroutine(PlayAnimationThenMove("MoveDown", MoveAnim.Down));
+                    break;
             }
             
             despawnTimer.ResetTimer();
@@ -312,11 +343,11 @@ public class CrocBehaviour : MonoBehaviour
     public void Stop()
     {
         
-        this.transform.position = originalPosition;
+        this.transform.position = originalPosition + new Vector3(0, -2, 0);
         this.State = CrocState.IsDown;
         this.despawnTimer.ResetTimer();
     }
-
+    // for audioclip randomization
     AudioClip PickRandomSFXFromArray(AudioClip[] audioClips)
     {
         return audioClips[UnityEngine.Random.Range(0, audioClips.Length)];
