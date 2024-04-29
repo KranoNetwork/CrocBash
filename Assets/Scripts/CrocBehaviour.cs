@@ -48,8 +48,7 @@ public class CrocBehaviour : MonoBehaviour
     [Header("References")]
     [SerializeField] string playerTagName; // the tag the player has (through the liminal tag package)
     Rigidbody rb; // the rigidbody attached to the gameObj this script is attached to
-    //[SerializeField] GameObject crocUp;
-    //[SerializeField] GameObject crocDown;
+    
     [SerializeField] CrocManager crocManager; //[TD] - dependency
 
 
@@ -79,7 +78,7 @@ public class CrocBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        this.rb.velocity = Vector3.zero;
+        this.rb.velocity = Vector3.zero; //freesing the position and rotation should remove the need for this line
 
         
         UpdateBasedOnState();
@@ -111,7 +110,7 @@ public class CrocBehaviour : MonoBehaviour
                 break;
         }
     }
-    void HandleSpawnRateIncrease()
+    void HandleSpawnRateIncrease() // the crocs shouldn't manage this, the manager should
     {
         if (popCounts >= 2)
         {
@@ -123,7 +122,7 @@ public class CrocBehaviour : MonoBehaviour
         }
     }
 
-    void UpdateBasedOnTimerState()
+    void UpdateBasedOnTimerState() // the manager will handling despawning the crocs
     {
         switch(despawnTimer.State)
         {
@@ -328,6 +327,8 @@ public class CrocBehaviour : MonoBehaviour
             despawnTimer.ResetTimer();
             audioSource.PlayOneShot(PickRandomSFXFromArray(despawnSFX));
             //lets croc manager know the croc has despawned
+
+            // giving the croc too much responsibility -> made it hard to control how often crocs were popping up and down
             crocManager.OnCrocDespawn(); // [TD] - dependency
 
 
