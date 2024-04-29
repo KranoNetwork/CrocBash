@@ -21,7 +21,7 @@ public class CrocBehaviorNew : MonoBehaviour
     public CrocState State; //the croc state; replaces the bools: isHit, isUp, and isMovingUp in the MoleController script
 
     [Header("Timer")]
-    public Timer despawnTimer; //timer for handling despawing if not hit
+    Timer despawnTimer; //timer for handling despawing if not hit
     public float timeBeforeDespawnIfNotHit; //amount of time to wait before despawning
     public int popCounts; //keeps track of the number of time the croc has popped up -> used for decreasing timeBeforeDespawnIfNotHit so that as the game progresses, the crocs spawn and despawn faster.
 
@@ -174,6 +174,20 @@ public class CrocBehaviorNew : MonoBehaviour
         this.transform.position = originalPosition + new Vector3(0, -2, 0);
         this.State = CrocState.IsDown;
         this.despawnTimer.ResetTimer();
+    }
+
+    // TIMER MANAGEMENT
+    public void StartDespawnTimer(float durationInSeconds)
+    {
+        despawnTimer.StartTimer(Time.time, durationInSeconds);
+    }
+    public void UpdateDespawnTimer()
+    {
+        despawnTimer.UpdateTimer(Time.time);
+    }
+    public void ResetDespawnTimer()
+    {
+        despawnTimer.ResetTimer();
     }
 
     // M E T H O D S: MINOR

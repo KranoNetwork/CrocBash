@@ -31,6 +31,8 @@ public class CrocManager : MonoBehaviour
     int currentCrocIndex;
     public CrocMode CrocModeToggle;
 
+    public bool CanSpawnNewCroc;
+
     [Header("Timer")]
     public Timer PopMoreCrocTimer; // timer for handling when to pop up the multiple crocs
     [SerializeField] float numOfSecsBeforeMoreCrocsPopUpAtOnce;
@@ -97,17 +99,16 @@ public class CrocManager : MonoBehaviour
         // the croc already updates it's state so this does't need to do it
 
         gameManager.IncreaseScore(1);
-        //gameManager.Score += 1;
-        //UnityEngine.Debug.Log("CM SCORE CHANGE: " +  gameManager.Score);
         // select the next croc to pop up
         SelectNextCroc();
     }
-    public void OnCrocDespawn()
+    private void OnCrocDespawn()
     {
-        SelectNextCroc();
+
     }
 
-    void SelectNextCroc() // replaces SelectNextMole()
+    #region 'managing the crocs'
+    private void SelectNextCroc() // replaces SelectNextMole()
     {
         /* while this method is running, 
          *  - check if there are active crocs
@@ -133,8 +134,8 @@ public class CrocManager : MonoBehaviour
         }
     }
 
-    
-    void SelectCrocs() // replaces MoleSelect() from SelectPopUpMole.cs
+
+    private void SelectCrocs() // replaces MoleSelect() from SelectPopUpMole.cs
     {
         int _randomNum;
         CrocBehaviour _tempCBref;
@@ -172,12 +173,11 @@ public class CrocManager : MonoBehaviour
                     break;
             } while (CheckCurrentCroc(_tempCBref, _randomNum)); // do those things while this method returns true
 
-            //Crocs[_randomNum].GetComponent<CrocBehaviour>().SetCrocState(CrocState.IsMovingUp);
             PopUp(Crocs[_randomNum]);
         }
     }
 
-    bool CheckCurrentCroc(CrocBehaviour _tempCBref, int _indexNum)
+    private bool CheckCurrentCroc(CrocBehaviour _tempCBref, int _indexNum)
     {
         /// <summary>
         ///  Looks at the selected croc, 
@@ -192,9 +192,7 @@ public class CrocManager : MonoBehaviour
         previousCrocIndex = currentCrocIndex;
         currentCrocIndex = _indexNum;
 
-        if (_tempCBref.State == CrocState.IsUp 
-            || _tempCBref.State == CrocState.IsMovingUp
-            || _tempCBref.State == CrocState.IsHit)
+        if (_tempCBref.State != CrocState.IsDown || _tempCBref.State != CrocState.IsHit)
         {
             return true;
         }
@@ -206,50 +204,63 @@ public class CrocManager : MonoBehaviour
         return false;
     }
 
-    public bool CheckActiveCrocs() // basically the same as CheckActiveMoles()
+    private bool CheckActiveCrocs() // basically the same as CheckActiveMoles()
     {
         /// <summary>
         /// checks to see if there are selected crocs/ crocs that are up
         /// </summary>
         int temp = 0;
 
-        foreach (GameObject croc in Crocs)
+        foreach (GameObject croc in Crocs) //counts up how many cros are currently active
         {
             Debug.Log("FOREACH STARTED");
             CrocBehaviour tempCBref = croc.GetComponent<CrocBehaviour>();
 
             if (tempCBref != null ) // making sure there is a value
             {
-                if (tempCBref.State == CrocState.IsUp) // checking the state of the croc
+                if (tempCBref.State != CrocState.IsDown || tempCBref.State != CrocState.IsHit) // checking the state of the croc
                     temp += 1;
             }
         }
 
         Debug.Log("TEMP VALUE RAHHHHHHHH: " + temp);
 
-        if (temp <= AmountOfPopUps)
+        if (temp < AmountOfPopUps) // if the amount of active crocs is less than the amount of pop up allowed, return true
         {
             return true;
         }
-        else
+        else //if the num crocs is greater than the amount of pop ups, return false
         {
             return false;
         }
     }
 
-    public void PopUp(GameObject _croc) // replaces popUp(GameObject Mole)
+    private void PopUp(GameObject _croc) // replaces popUp(GameObject Mole)
     {
         CrocBehaviour tempCBscript = _croc.GetComponent<CrocBehaviour>();
 
         if (tempCBscript != null)
         {
-            tempCBscript.GetComponent<CrocBehaviour>().MoveUp();
+            tempCBscript.GetComponent<CrocBehaviour>().PopUp();
         }
     }
 
     // don't need PlaySoundEffect() since the crocs already play the sound effect
 
-    void CountDown() // replaces CountDown()
+
+    private void StopCrocs()
+    {
+        CrocBehaviour _tempCB;
+        foreach (GameObject croc in Crocs)
+        {
+            _tempCB = croc.gameObject.GetComponent<CrocBehaviour>();
+            if (_tempCB != null)
+                croc.gameObject.GetComponent<CrocBehaviour>().Stop();
+        }
+    }
+    #endregion
+
+    private void CountDown() // replaces CountDown()
     {
         // update timer 
         PopMoreCrocTimer.UpdateTimer(Time.time);
@@ -271,16 +282,20 @@ public class CrocManager : MonoBehaviour
         }
     }
 
-    void StopCrocs()
-    {
-        CrocBehaviour _tempCB;
-        foreach(GameObject croc in Crocs)
-        {
-            _tempCB = croc.gameObject.GetComponent<CrocBehaviour>();
-            if (_tempCB != null)
-                croc.gameObject.GetComponent<CrocBehaviour>().Stop();
-        }
-    }
 
+    public void TriggerNewCrocToPopUp()
+    {
+        CanSpawnNewCroc = true;
+    }
+    private bool CanPopNewCroc()
+    {
+        //if the despawn timers have ended or if a croc has been hit, return true
+        //else return false
+    }
+    private void PopNewCrocIfAble()
+    {
+        // select croc();
+        //start timer
+    }
 
 }
