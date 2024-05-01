@@ -68,6 +68,7 @@ public class CrocBehaviour : MonoBehaviour
         switch (State)
         {
             case CrocState.IsUp:
+                Debug.Log("Croc state = " + State.ToString());
                 this.despawnTimer.UpdateTimer(Time.time); //updates timer
                 if (animator.GetCurrentAnimatorStateInfo(0).IsName("Still")  //|| coroutineState == CoroutineState.Ended || coroutineState == CoroutineState.Off
                     )
@@ -75,6 +76,7 @@ public class CrocBehaviour : MonoBehaviour
                 break;
 
             case CrocState.IsDown:
+                Debug.Log("Croc state = " + State.ToString());
                 if (animator.GetCurrentAnimatorStateInfo(0).IsName("Still")
                    )
                 {
@@ -133,6 +135,7 @@ public class CrocBehaviour : MonoBehaviour
     // M E T H O D S: MAJOR
     public void PopUp() // Replaces the PopUp() method from MoleController.cs
     {
+        Debug.Log("POPPING UP!");
         State = CrocState.IsMovingUp;
         audioSource.PlayOneShot(PickRandomSFXFromArray(spawnSFX));
         popCounts++;
@@ -146,6 +149,9 @@ public class CrocBehaviour : MonoBehaviour
     {
         if (State == CrocState.IsUp)
         {
+            Debug.Log("DESPAWNING");
+            State = CrocState.IsDown;
+
             rb.isKinematic = false;
 
             audioSource.PlayOneShot(PickRandomSFXFromArray(despawnSFX));
@@ -153,13 +159,15 @@ public class CrocBehaviour : MonoBehaviour
 
             despawnTimer.ResetTimer();
 
-            State = CrocState.IsDown;
+            
         }
     }
     private void Hit()
     {
         if (State == CrocState.IsUp || State == CrocState.IsMovingUp)
         {
+            Debug.Log("HIT!!");
+
             State = CrocState.IsHit;
             rb.isKinematic = false;
 
@@ -175,7 +183,7 @@ public class CrocBehaviour : MonoBehaviour
     }
     public void Stop()
     {
-
+        Debug.Log("STOPPED!");
         this.transform.position = originalPosition + new Vector3(0, -2, 0);
         this.State = CrocState.IsDown;
         this.despawnTimer.ResetTimer();
@@ -194,6 +202,13 @@ public class CrocBehaviour : MonoBehaviour
     {
         despawnTimer.ResetTimer();
     }
+    public bool CompareDespawnTimerState(TimerState state)
+    {
+        if (despawnTimer.State == state)
+            return true;
+
+        return false;
+    }
 
     // M E T H O D S: MINOR
     // for audioclip randomization
@@ -206,7 +221,7 @@ public class CrocBehaviour : MonoBehaviour
     IEnumerator PlayAnimationThenMove(string animationTriggerName, MoveAnim direction)
     {
         animator.SetTrigger(animationTriggerName); //triggers the animation
-        yield return new WaitForSeconds(3); //waits 
+        yield return new WaitForSeconds(2); //waits 
 
         switch (direction) // handles movement behavior
         {
@@ -222,6 +237,10 @@ public class CrocBehaviour : MonoBehaviour
         }
     }
 
+    public void DecreaseDespawnTime()
+    {
+        timeBeforeDespawnIfNotHit = timeBeforeDespawnIfNotHit / 2;
+    }
     // the original MoleController.cs had timers in it that weren't actually 
     // being used, so that logic (the TickTimers() method) has been removed
 }

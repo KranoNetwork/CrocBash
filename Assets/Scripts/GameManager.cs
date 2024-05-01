@@ -7,6 +7,7 @@ using TMPro;
 using UnityEngine;
 using static Valve.VR.SteamVR_TrackedObject;
 
+public enum GameStates { Starting, Playing, Ending }
 public class GameManager : MonoBehaviour
 {
     // P R O P E R T I E S
@@ -40,7 +41,7 @@ public class GameManager : MonoBehaviour
     [Header("Object References")]
     [SerializeField] private CrocManager crocManager;
 
-    private enum GameStates { Starting, Playing, Ending }
+    
 
     // U N I T Y  M E T H O D S
     void Awake()
@@ -113,6 +114,7 @@ public class GameManager : MonoBehaviour
 
     public void EndRound()
     {
+        State = GameStates.Ending;
         crocManager.OnRoundEnd();
         RoundTimer = new Timer();
         //SetHighScore();
