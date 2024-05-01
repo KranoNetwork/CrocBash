@@ -35,6 +35,10 @@ public class Timer
 
             State = TimerState.Ended;
         }
+        else if (State == TimerState.Off)
+        {
+            State = TimerState.Off;
+        }
     }
 
     public void ResetTimer()
