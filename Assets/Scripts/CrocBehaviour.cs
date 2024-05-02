@@ -32,6 +32,8 @@ public class CrocBehaviour : MonoBehaviour
 
     [Header("Animation")]
     [SerializeField] Animator animator;
+    [SerializeField] ParticleSystem hitVFX;
+    [SerializeField] TriggerParticleFX GroundParticleFX;
 
     [Header("Audio")]
     [SerializeField] AudioSource audioSource;
@@ -52,6 +54,7 @@ public class CrocBehaviour : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         animator = GetComponentInChildren<Animator>();
         audioSource = GetComponent<AudioSource>();
+        GroundParticleFX = GetComponent<TriggerParticleFX>();
 
     }
     void OnEnable()
@@ -136,6 +139,7 @@ public class CrocBehaviour : MonoBehaviour
     public void PopUp() // Replaces the PopUp() method from MoleController.cs
     {
         Debug.Log("POPPING UP!");
+        GroundParticleFX.PlayParticleFX1();
         State = CrocState.IsMovingUp;
         audioSource.PlayOneShot(PickRandomSFXFromArray(spawnSFX));
         popCounts++;
@@ -173,6 +177,7 @@ public class CrocBehaviour : MonoBehaviour
 
             despawnTimer.ResetTimer();
 
+            hitVFX.Play();
             audioSource.PlayOneShot(PickRandomSFXFromArray(hitSFX));
             StartCoroutine(PlayAnimationThenMove("Hit", MoveAnim.Hit));
 
