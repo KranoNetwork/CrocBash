@@ -170,13 +170,13 @@ ModelImporter:
     second: croc_rig.001|croc_rig.002|croc_rig.001|croc_rig|up.004
   - first:
       74: -3565749611611302189
-    second: croc_rig.001|croc_rig.002|croc_rig.001|down
+    second: 1CrocHit
   - first:
       74: -7754061024215659366
     second: croc_rig.001|croc_rig.002|croc_rig|CubeAction
   - first:
       74: -7420405248905086579
-    second: croc_rig.001|croc_rig.002|croc_rig|down
+    second: 2CrocHit
   - first:
       74: -6435505430254057519
     second: croc_rig.001|croc_rig.002|croc_rig|up
@@ -188,7 +188,7 @@ ModelImporter:
     second: croc_rig.001|croc_rig|croc_rig|CubeAction
   - first:
       74: -5611325237162247608
-    second: croc_rig.001|croc_rig|croc_rig|down
+    second: 2CrocDown
   - first:
       74: 5125382302840951880
     second: croc_rig.001|croc_rig|croc_rig|up
@@ -1539,7 +1539,7 @@ ModelImporter:
       takeName: croc_rig.001|croc_rig.002|croc_rig.001|croc_rig|croc_rig|down
       internalID: -3207237146297804463
       firstFrame: 0
-      lastFrame: 5
+      lastFrame: 24
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -1568,7 +1568,7 @@ ModelImporter:
       takeName: croc_rig.001|croc_rig.002|croc_rig.001|croc_rig|croc_rig|down.001
       internalID: -6544103987356011706
       firstFrame: 0
-      lastFrame: 5
+      lastFrame: 24
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -1825,11 +1825,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: croc_rig.001|croc_rig.002|croc_rig.001|down
+      name: 1CrocHit
       takeName: croc_rig.001|croc_rig.002|croc_rig.001|down
       internalID: -3565749611611302189
       firstFrame: 0
-      lastFrame: 5
+      lastFrame: 24
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -1883,11 +1883,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: croc_rig.001|croc_rig.002|croc_rig|down
+      name: 2CrocHit
       takeName: croc_rig.001|croc_rig.002|croc_rig|down
       internalID: -7420405248905086579
       firstFrame: 0
-      lastFrame: 5
+      lastFrame: 24
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -1999,11 +1999,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: croc_rig.001|croc_rig|croc_rig|down
+      name: 2CrocDown
       takeName: croc_rig.001|croc_rig|croc_rig|down
       internalID: -5611325237162247608
       firstFrame: 0
-      lastFrame: 5
+      lastFrame: 24
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

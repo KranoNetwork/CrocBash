@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using static Valve.VR.SteamVR_TrackedObject;
 
-public enum CrocState { IsDown, IsMovingUp, IsUp, IsHit }
+public enum CrocState { IsDown, IsMovingDown, IsMovingUp, IsUp, IsHit }
 
 public class CrocBehaviour : MonoBehaviour
 {
@@ -24,6 +24,7 @@ public class CrocBehaviour : MonoBehaviour
     [SerializeField] float moveDistance; //distance to move the croc up
     [SerializeField] float moveSpeed = 0.1f; //speed at which to move the croc up
     public CrocState State; //the croc state; replaces the bools: isHit, isUp, and isMovingUp in the MoleController script
+    [SerializeField] bool isCoroutineRunning;
 
     [Header("Timer")]
     Timer despawnTimer; //timer for handling despawing if not hit
@@ -55,7 +56,7 @@ public class CrocBehaviour : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         audioSource = GetComponent<AudioSource>();
         GroundParticleFX = GetComponent<TriggerParticleFX>();
-
+        isCoroutineRunning = false;
     }
     void OnEnable()
     {
@@ -80,9 +81,9 @@ public class CrocBehaviour : MonoBehaviour
 
             case CrocState.IsDown:
                 Debug.Log("Croc state = " + State.ToString());
-                if (animator.GetCurrentAnimatorStateInfo(0).IsName("Still")
-                   )
+                if (!isCoroutineRunning)
                 {
+                    //if (transform.InverseTransformPoint(transform.position).y > 0) 
                     this.transform.position = originalPosition; //corrects position to keep it from drifting 
                 }
                 break;
@@ -154,8 +155,8 @@ public class CrocBehaviour : MonoBehaviour
         if (State == CrocState.IsUp)
         {
             Debug.Log("DESPAWNING");
-            State = CrocState.IsDown;
-
+            GroundParticleFX.PlayParticleFX1();
+            State = CrocState.IsMovingDown;
             rb.isKinematic = false;
 
             audioSource.PlayOneShot(PickRandomSFXFromArray(despawnSFX));
@@ -163,23 +164,25 @@ public class CrocBehaviour : MonoBehaviour
 
             despawnTimer.ResetTimer();
 
-            
+
+            State = CrocState.IsDown;
         }
     }
     private void Hit()
     {
-        if (State == CrocState.IsUp || State == CrocState.IsMovingUp)
+        if (State == CrocState.IsUp )
         {
-            Debug.Log("HIT!!");
-
             State = CrocState.IsHit;
+            Debug.Log("HIT!!");
+            hitVFX.Play();
             rb.isKinematic = false;
 
-            despawnTimer.ResetTimer();
 
-            hitVFX.Play();
             audioSource.PlayOneShot(PickRandomSFXFromArray(hitSFX));
+            State = CrocState.IsMovingDown;
             StartCoroutine(PlayAnimationThenMove("Hit", MoveAnim.Hit));
+
+            despawnTimer.ResetTimer();
 
             crocManager.OnCrocHit();
 
@@ -225,8 +228,16 @@ public class CrocBehaviour : MonoBehaviour
     private enum MoveAnim { Up, Down, Hit }
     IEnumerator PlayAnimationThenMove(string animationTriggerName, MoveAnim direction)
     {
+        isCoroutineRunning = true;
+        float secondsToWait = 2;
+        switch (direction)
+        {
+            case MoveAnim.Up: secondsToWait = 3; break;
+            case MoveAnim.Down: secondsToWait = .7f; break;
+            case MoveAnim.Hit: secondsToWait = .75f; break;
+        }
         animator.SetTrigger(animationTriggerName); //triggers the animation
-        yield return new WaitForSeconds(2); //waits 
+        yield return new WaitForSeconds(secondsToWait); //waits 
 
         switch (direction) // handles movement behavior
         {
@@ -240,11 +251,15 @@ public class CrocBehaviour : MonoBehaviour
                 transform.position = originalPosition;
                 break;
         }
+        isCoroutineRunning = false;
     }
 
     public void DecreaseDespawnTime()
     {
         timeBeforeDespawnIfNotHit = timeBeforeDespawnIfNotHit / 2;
+
+        if (timeBeforeDespawnIfNotHit < 1)
+            timeBeforeDespawnIfNotHit = 1;
     }
     // the original MoleController.cs had timers in it that weren't actually 
     // being used, so that logic (the TickTimers() method) has been removed
