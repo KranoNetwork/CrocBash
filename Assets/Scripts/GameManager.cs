@@ -1,26 +1,35 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine;
 using static Valve.VR.SteamVR_TrackedObject;
 
+/// <summary>
+/// Defines the states of the game/experience
+/// </summary>
 public enum GameStates { Starting, Playing, Ending }
+
+/// <summary>
+/// Defines the behavior and actions of the game manager.
+/// </summary>
 public class GameManager : MonoBehaviour
 {
+    /// <summary>
+    /// 
+    /// </summary>
+
     // P R O P E R T I E S
     [Header("State Management")]
     [SerializeField] private GameStates State;
 
     [Header("Score Management")]
-    [SerializeField] float StartTimerLength;
-    private Timer IntroTimer;
-    [SerializeField] float RoundTimerLength;
-    public Timer RoundTimer;
-    public int Score = 0;
-    public int HighScore = 0;
+    [SerializeField] float StartTimerLength; // length of the intro of the experience
+    private Timer IntroTimer; //timer for the intro
+    [SerializeField] float RoundTimerLength; //length of the round -> the amount of time the gameplay runs for 
+    public Timer RoundTimer; // timer for the gameplay
+    public int Score = 0; // the score
 
 
     [Header("UI References")]
@@ -183,11 +192,6 @@ public class GameManager : MonoBehaviour
         
     }
 
-    void SetHighScore()
-    {
-        if (Score >= HighScore)
-            HighScore = Score;
-    }
     void SetEndUiContent()
     {
         GamePlayUiObject.SetActive(false);

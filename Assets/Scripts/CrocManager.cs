@@ -10,15 +10,17 @@ using UnityEngine.UI;
 using Valve.VR;
 using static Valve.VR.SteamVR_TrackedObject;
 
+/// <summary>
+/// Defines the behavior and actions of the croc manager.
+/// </summary>
 public class CrocManager : MonoBehaviour
 {
     /// <summary>
     /// Manages the crocs
-    ///     - triggers them to move up
+    ///     - triggers them to move 
     ///     - selects the crocs 
-    ///     - holds the list of crocs
-    ///     
-    /// is replacing the SelectPopUpMole.cs script
+    ///     - holds the array of crocs
+    ///  
     /// </summary>
     /// 
 
@@ -27,18 +29,18 @@ public class CrocManager : MonoBehaviour
 
     [Header("Croc Management")]
     public bool CanSelectCroc; // looks to see if another croc can be selected
-    int previousCrocIndex; // for noting what the index of the previous croc was
-    int currentCrocIndex;
+    private bool canSpawnNewCroc; //used to check whether or not a new croc can be spawned
+    int previousCrocIndex; // for noting what the index of the previous/y selected croc was
+    int currentCrocIndex; // for noting what the index of the currently selected croc is
 
-    [SerializeField] private bool canSpawnNewCroc;
 
     [Header("Timer")]
-    public Timer PopMoreCrocTimer; // timer for handling when to pop up the multiple crocs
-    [SerializeField] float numOfSecsBeforeMoreCrocsPopUpAtOnce;
+    [SerializeField] float timeBeforeCrocsDespawnFaster;
     public int AmountOfPopUps; // number of crocs that can be up at once
+    public Timer DecreaseDespawnTimeTimer; // timer for handling when to pop up the multiple crocs
 
     [Header("References")]
-    [SerializeField] public GameObject[] Crocs; // list of crocs for reference
+    [SerializeField] public GameObject[] Crocs; // array of crocs for reference
     [SerializeField] GameManager gameManager;
 
     // U N I T  M E T H O D S 
@@ -47,11 +49,11 @@ public class CrocManager : MonoBehaviour
         gameState = GameStates.Starting;
 
         // reference initializations 
-        PopMoreCrocTimer = new Timer();
+        DecreaseDespawnTimeTimer = new Timer();
 
         // var inits
         AmountOfPopUps = 1;
-        numOfSecsBeforeMoreCrocsPopUpAtOnce = 30;
+        timeBeforeCrocsDespawnFaster = 30;
         // initialise things 
     }
 
@@ -93,7 +95,7 @@ public class CrocManager : MonoBehaviour
         // start game, gameplay will no longer start when
         //  unity calls Start() since the menu and gameplay are in the same scene
         Debug.Log("STARTING GAME");
-        PopMoreCrocTimer.StartTimer(Time.time, numOfSecsBeforeMoreCrocsPopUpAtOnce);
+        DecreaseDespawnTimeTimer.StartTimer(Time.time, timeBeforeCrocsDespawnFaster);
         TriggerNewCrocToPopUp();
     }
     public void OnRoundEnd()
@@ -267,7 +269,9 @@ public class CrocManager : MonoBehaviour
 
     // don't need PlaySoundEffect() since the crocs already play the sound effect
 
-
+    /// <summary>
+    /// Stops the movement behavior of all the crocs.
+    /// </summary>
     private void StopCrocs()
     {
         CrocBehaviour _tempCB;
@@ -287,46 +291,33 @@ public class CrocManager : MonoBehaviour
     #endregion
 
     /// <summary>
-    /// Increases the amount of crocs up at a given time when the timer ends
+    /// Ticks the timer. Decreases the despawn time of the crocs if the timer has ended.
     /// </summary>
     private void CountDown() // replaces CountDown()
     {
         // update timer 
-        PopMoreCrocTimer.UpdateTimer(Time.time);
+        DecreaseDespawnTimeTimer.UpdateTimer(Time.time);
 
+        Debug.Log("DECREASE DESPAWN TIMER STATE:" + DecreaseDespawnTimeTimer.State.ToString());
 
-        if (PopMoreCrocTimer.State == TimerState.Ended)
+        if (DecreaseDespawnTimeTimer.State == TimerState.Ended)
         {
+            Debug.Log("DECREASE DESPAWN TIMER ENDED!");
             foreach (GameObject croc in Crocs)
             {
+                Debug.Log("SELECTED CROC: " + croc.name);
                 CrocBehaviour cbTemp = croc.GetComponent<CrocBehaviour>();
                 if (cbTemp != null)
                     croc.GetComponent<CrocBehaviour>().DecreaseDespawnTime();
             }
-            PopMoreCrocTimer.StartTimer(Time.time, numOfSecsBeforeMoreCrocsPopUpAtOnce);
+            DecreaseDespawnTimeTimer.StartTimer(Time.time, timeBeforeCrocsDespawnFaster);
         }
         
-
-        #region
-        ////if the timer has ended 
-        //// adjust AmountOfPopUps value (but don't let it go above 2)
-        //// reset the timer
-        //if (PopMoreCrocTimer.State == TimerState.Ended)
-        //{
-        //    if (AmountOfPopUps >= 2)
-        //    {
-        //        AmountOfPopUps = 2;
-        //    }
-        //    else
-        //    {
-        //        AmountOfPopUps++;
-        //    }
-        //    PopMoreCrocTimer.StartTimer(Time.time, numOfSecsBeforeMoreCrocsPopUpAtOnce);
-        //}
-        #endregion
     }
 
-
+    /// <summary>
+    /// Triggers the next croc to pop up.
+    /// </summary>
     public void TriggerNewCrocToPopUp() //public access point
     {
         Debug.Log("NEXT POP UP TRIGGERED");

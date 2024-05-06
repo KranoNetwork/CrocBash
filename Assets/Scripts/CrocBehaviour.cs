@@ -5,8 +5,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using static Valve.VR.SteamVR_TrackedObject;
 
+/// <summary>
+/// The states a croc can be in.
+/// </summary>
 public enum CrocState { IsDown, IsMovingDown, IsMovingUp, IsUp, IsHit }
 
+/// <summary>
+/// Defines the behavior and actions of the crocs.
+/// </summary>
 public class CrocBehaviour : MonoBehaviour
 {
     /// <summary>
@@ -20,33 +26,33 @@ public class CrocBehaviour : MonoBehaviour
 
     // P R O P E R T I E S
     [Header("Movement")]
-    [SerializeField] Vector3 originalPosition; // original pos for putting the croc back down
     [SerializeField] float moveDistance; //distance to move the croc up
-    [SerializeField] float moveSpeed = 0.1f; //speed at which to move the croc up
-    public CrocState State; //the croc state; replaces the bools: isHit, isUp, and isMovingUp in the MoleController script
-    [SerializeField] bool isCoroutineRunning;
+    public CrocState State; //the croc's state
+    bool isCoroutineRunning; //Used to track whether or not the coroutine animating and moving the crocs has ended or not
+    Vector3 originalPosition; // original pos for putting the croc back down
 
     [Header("Timer")]
-    Timer despawnTimer; //timer for handling despawing if not hit
     public float timeBeforeDespawnIfNotHit; //amount of time to wait before despawning
-    public int popCounts; //keeps track of the number of time the croc has popped up -> used for decreasing timeBeforeDespawnIfNotHit so that as the game progresses, the crocs spawn and despawn faster.
+    [SerializeField] float minimumTimeBeforeDespawn;
+    [SerializeField] float rateOfDecrease;
+    Timer despawnTimer; //timer for handling despawing if not hit
 
     [Header("Animation")]
-    [SerializeField] Animator animator;
-    [SerializeField] ParticleSystem hitVFX;
-    [SerializeField] TriggerParticleFX GroundParticleFX;
+    [SerializeField] ParticleSystem hitVFX; //the hit particle FX attached to the croc gameObject
+    TriggerParticleFX GroundParticleFX; //Script that triggers a particle effect, in this use case it's the ground particle effect
+    Animator animator;
 
     [Header("Audio")]
-    [SerializeField] AudioSource audioSource;
-    [SerializeField] AudioClip[] hitSFX; //gets initialized in editor
-    [SerializeField] AudioClip[] spawnSFX;
-    [SerializeField] AudioClip[] despawnSFX;
+    [SerializeField] AudioClip[] hitSFX; //array of hit SFX, gets initialized in editor
+    [SerializeField] AudioClip[] spawnSFX; //array of spawn SFX, gets initialized in editor
+    [SerializeField] AudioClip[] despawnSFX; //array of despawn SFX, gets initialized in editor
+    AudioSource audioSource; //reference to the audioSource for playing sound
 
     [Header("References")]
     [SerializeField] string playerTagName; // the tag the player has (through the liminal tag package)
+    [SerializeField] CrocManager crocManager; //[TD] - dependency
     Rigidbody rb; // the rigidbody attached to the gameObj this script is attached to
 
-    [SerializeField] CrocManager crocManager; //[TD] - dependency
 
     // U N I T Y  M E T H O D S
     void Awake()
@@ -60,13 +66,15 @@ public class CrocBehaviour : MonoBehaviour
     }
     void OnEnable()
     {
-        originalPosition = transform.position;
+        originalPosition = transform.position; //saves the original position of the croc
     }
-
     void Update()
     {
         UpdateBasedOnState();
     }
+    /// <summary>
+    /// Updates the croc based on its state.
+    /// </summary>
     void UpdateBasedOnState()
     {
         switch (State)
@@ -95,9 +103,6 @@ public class CrocBehaviour : MonoBehaviour
     {
         // used for making sure the things are hit from above and not from the side
         Vector3 _tempRelativePosition;
-
-        //if (collision.gameObject != null)
-        //    UnityEngine.Debug.Log($"{this.name} collided with {collision.gameObject.name}");
 
         if (TagManager.CompareTags(collision.gameObject, playerTagName)
             && (this.State == CrocState.IsUp || this.State == CrocState.IsMovingUp))
@@ -136,17 +141,18 @@ public class CrocBehaviour : MonoBehaviour
         }
     }
 
-    // M E T H O D S: MAJOR
+
+    // A C T I O N S   A N D   B E H A V I O R
+    #region 'Actions and Behavior'
     public void PopUp() // Replaces the PopUp() method from MoleController.cs
     {
         Debug.Log("POPPING UP!");
         GroundParticleFX.PlayParticleFX1();
         State = CrocState.IsMovingUp;
         audioSource.PlayOneShot(PickRandomSFXFromArray(spawnSFX));
-        popCounts++;
 
-        despawnTimer.StartTimer(Time.time, timeBeforeDespawnIfNotHit);
-        StartCoroutine(PlayAnimationThenMove("MoveUp", MoveAnim.Up));
+        StartDespawnTimer(timeBeforeDespawnIfNotHit);
+        StartCoroutine(PlayAnimationThenMove("MoveUp", MoveActionType.Up));
 
         State = CrocState.IsUp;
     }
@@ -160,9 +166,9 @@ public class CrocBehaviour : MonoBehaviour
             rb.isKinematic = false;
 
             audioSource.PlayOneShot(PickRandomSFXFromArray(despawnSFX));
-            StartCoroutine(PlayAnimationThenMove("MoveDown", MoveAnim.Down));
+            StartCoroutine(PlayAnimationThenMove("MoveDown", MoveActionType.Down));
 
-            despawnTimer.ResetTimer();
+            ResetDespawnTimer();
 
 
             State = CrocState.IsDown;
@@ -180,9 +186,9 @@ public class CrocBehaviour : MonoBehaviour
 
             audioSource.PlayOneShot(PickRandomSFXFromArray(hitSFX));
             State = CrocState.IsMovingDown;
-            StartCoroutine(PlayAnimationThenMove("Hit", MoveAnim.Hit));
+            StartCoroutine(PlayAnimationThenMove("Hit", MoveActionType.Hit));
 
-            despawnTimer.ResetTimer();
+            ResetDespawnTimer();
 
             crocManager.OnCrocHit();
 
@@ -194,22 +200,83 @@ public class CrocBehaviour : MonoBehaviour
         Debug.Log("STOPPED!");
         this.transform.position = originalPosition + new Vector3(0, -2, 0);
         this.State = CrocState.IsDown;
-        this.despawnTimer.ResetTimer();
+        ResetDespawnTimer();
     }
 
+
+    // M O V E M E N T   A N D    A N I M A T I O N
+
+    /// <summary>
+    /// Defines the different types of action movements of the crocs.
+    /// </summary>
+    private enum MoveActionType { Up, Down, Hit }
+
+    /// <summary>
+    /// Coroutine that will play the animation and then move the croc based off the movement type.
+    /// </summary>
+    /// <param name="animationTriggerName">The name of the animation to trigger.</param>
+    /// <param name="action">The type of movement action to be performed.</param>
+    /// <returns></returns>
+    IEnumerator PlayAnimationThenMove(string animationTriggerName, MoveActionType action)
+    {
+        isCoroutineRunning = true;
+        float secondsToWait = 2;
+        switch (action)
+        {
+            case MoveActionType.Up: secondsToWait = 3; break;
+            case MoveActionType.Down: secondsToWait = .7f; break;
+            case MoveActionType.Hit: secondsToWait = .75f; break;
+        }
+        animator.SetTrigger(animationTriggerName); //triggers the animation
+        yield return new WaitForSeconds(secondsToWait); //waits 
+
+        switch (action) // handles movement behavior
+        {
+            case MoveActionType.Up:
+                this.transform.position = originalPosition
+                    + new Vector3(0, moveDistance, 0); //corrects position to keep it from drifting 
+                break;
+
+            case MoveActionType.Down:
+            case MoveActionType.Hit:
+                transform.position = originalPosition;
+                break;
+        }
+        isCoroutineRunning = false;
+    }
+    #endregion
+
     // TIMER MANAGEMENT
+    #region 'Timer Management'
+    /// <summary>
+    /// Starts the despawn timer.
+    /// </summary>
+    /// <param name="durationInSeconds">The duration of the timer in seconds.</param>
     public void StartDespawnTimer(float durationInSeconds)
     {
         despawnTimer.StartTimer(Time.time, durationInSeconds);
     }
+
+    /// <summary>
+    /// Updates the despsawn timer.
+    /// </summary>
     public void UpdateDespawnTimer()
     {
         despawnTimer.UpdateTimer(Time.time);
     }
+
+    /// <summary>
+    /// Resets the despawn timer.
+    /// </summary>
     public void ResetDespawnTimer()
     {
         despawnTimer.ResetTimer();
     }
+    /// <summary>
+    /// Checks the state of the timer.
+    /// </summary>
+    /// <param name="state">The state of the timer.</param>
+    /// <returns></returns>
     public bool CompareDespawnTimerState(TimerState state)
     {
         if (despawnTimer.State == state)
@@ -218,49 +285,38 @@ public class CrocBehaviour : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Decreases the amount of time the croc waits before it despawns.
+    /// </summary>
+    public void DecreaseDespawnTime()
+    {
+        Debug.Log("DECREASING DESPAWN TIME");
+        timeBeforeDespawnIfNotHit = timeBeforeDespawnIfNotHit / rateOfDecrease;
+
+        if (timeBeforeDespawnIfNotHit < minimumTimeBeforeDespawn)
+        {
+            Debug.Log("DESPAWN TIME AT MINIMUM");
+            timeBeforeDespawnIfNotHit = minimumTimeBeforeDespawn;
+        }
+            
+    }
+    #endregion
+
     // M E T H O D S: MINOR
-    // for audioclip randomization
+
+    /// <summary>
+    /// Picks a random SFX from the passed in array
+    /// </summary>
+    /// <param name="audioClips"> The array of audioclips to pick the sound from.</param>
+    /// <returns></returns>
     AudioClip PickRandomSFXFromArray(AudioClip[] audioClips)
     {
         return audioClips[UnityEngine.Random.Range(0, audioClips.Length)];
     }
 
-    private enum MoveAnim { Up, Down, Hit }
-    IEnumerator PlayAnimationThenMove(string animationTriggerName, MoveAnim direction)
-    {
-        isCoroutineRunning = true;
-        float secondsToWait = 2;
-        switch (direction)
-        {
-            case MoveAnim.Up: secondsToWait = 3; break;
-            case MoveAnim.Down: secondsToWait = .7f; break;
-            case MoveAnim.Hit: secondsToWait = .75f; break;
-        }
-        animator.SetTrigger(animationTriggerName); //triggers the animation
-        yield return new WaitForSeconds(secondsToWait); //waits 
+    
 
-        switch (direction) // handles movement behavior
-        {
-            case MoveAnim.Up:
-                this.transform.position = originalPosition
-                    + new Vector3(0, moveDistance, 0); //corrects position to keep it from drifting 
-                break;
-
-            case MoveAnim.Down:
-            case MoveAnim.Hit:
-                transform.position = originalPosition;
-                break;
-        }
-        isCoroutineRunning = false;
-    }
-
-    public void DecreaseDespawnTime()
-    {
-        timeBeforeDespawnIfNotHit = timeBeforeDespawnIfNotHit / 2;
-
-        if (timeBeforeDespawnIfNotHit < 1)
-            timeBeforeDespawnIfNotHit = 1;
-    }
+    
     // the original MoleController.cs had timers in it that weren't actually 
     // being used, so that logic (the TickTimers() method) has been removed
 }
