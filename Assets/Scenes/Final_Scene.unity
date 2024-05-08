@@ -4037,7 +4037,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1255008220}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &276936175
 AudioSource:
@@ -5568,7 +5568,7 @@ Transform:
   - {fileID: 1708672285}
   - {fileID: 1453381896}
   m_Father: {fileID: 1255008220}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &598510547
 PrefabInstance:
@@ -6921,7 +6921,6 @@ GameObject:
   - component: {fileID: 650514486}
   - component: {fileID: 650514485}
   - component: {fileID: 650514488}
-  - component: {fileID: 650514489}
   m_Layer: 0
   m_Name: Ocean50x50W750H750
   m_TagString: Untagged
@@ -6986,7 +6985,7 @@ Transform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 1255008220}
-  m_RootOrder: 5
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &650514488
 MonoBehaviour:
@@ -7004,21 +7003,6 @@ MonoBehaviour:
   waveFrequency: 0.5
   waveLength: 0.75
   waveOriginPosition: {x: 0, y: 0, z: 0}
---- !u!114 &650514489
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 650514484}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df9d6cd8448b31c478e983681ac9dd7e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxrotation: 1
-  RotationSpeed: 52
-  Axis: 0
 --- !u!1001 &662257187
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8190,9 +8174,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveDistance: 1
   State: 0
-  timeBeforeDespawnIfNotHit: 2
-  minimumTimeBeforeDespawn: 0.25
-  rateOfDecrease: 2
+  popUpMovementDelay: 1.5
+  hitMovementDelay: 0.25
+  despawnMovementDelay: 0.3
+  timeBeforeDespawnIfNotHit: 1
   hitVFX: {fileID: 140777317}
   hitSFX:
   - {fileID: 8300000, guid: 976020b0b3d4f7243af32aeab52cda5e, type: 3}
@@ -9495,9 +9480,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveDistance: 1
   State: 0
-  timeBeforeDespawnIfNotHit: 2
-  minimumTimeBeforeDespawn: 0.25
-  rateOfDecrease: 2
+  popUpMovementDelay: 1.5
+  hitMovementDelay: 0.25
+  despawnMovementDelay: 0.3
+  timeBeforeDespawnIfNotHit: 1
   hitVFX: {fileID: 1427806821}
   hitSFX:
   - {fileID: 8300000, guid: 976020b0b3d4f7243af32aeab52cda5e, type: 3}
@@ -10769,7 +10755,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CanSelectCroc: 1
-  timeBeforeCrocsDespawnFaster: 10
   AmountOfPopUps: 1
   Crocs:
   - {fileID: 1856402440}
@@ -12583,9 +12568,9 @@ Transform:
   - {fileID: 1661655060}
   - {fileID: 798806669}
   - {fileID: 642791}
+  - {fileID: 650514487}
   - {fileID: 276936174}
   - {fileID: 574878997}
-  - {fileID: 650514487}
   - {fileID: 1034670361}
   - {fileID: 89925463}
   - {fileID: 881044543}
@@ -12789,25 +12774,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1265195738}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &1265195741
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1265195740}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: abed472fb2c3cd847a3110f83a8ca455, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &1275120491
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16064,9 +16030,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveDistance: 1
   State: 0
-  timeBeforeDespawnIfNotHit: 2
-  minimumTimeBeforeDespawn: 0.25
-  rateOfDecrease: 2
+  popUpMovementDelay: 1.5
+  hitMovementDelay: 0.25
+  despawnMovementDelay: 0.3
+  timeBeforeDespawnIfNotHit: 1
   hitVFX: {fileID: 907643960}
   hitSFX:
   - {fileID: 8300000, guid: 976020b0b3d4f7243af32aeab52cda5e, type: 3}
@@ -17791,9 +17758,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveDistance: 1
   State: 0
-  timeBeforeDespawnIfNotHit: 2
-  minimumTimeBeforeDespawn: 0.25
-  rateOfDecrease: 2
+  popUpMovementDelay: 1.5
+  hitMovementDelay: 0.25
+  despawnMovementDelay: 0.3
+  timeBeforeDespawnIfNotHit: 1
   hitVFX: {fileID: 1137578100}
   hitSFX:
   - {fileID: 8300000, guid: 976020b0b3d4f7243af32aeab52cda5e, type: 3}
@@ -18016,9 +17984,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveDistance: 1
   State: 0
-  timeBeforeDespawnIfNotHit: 2
-  minimumTimeBeforeDespawn: 0.25
-  rateOfDecrease: 2
+  popUpMovementDelay: 1.5
+  hitMovementDelay: 0.25
+  despawnMovementDelay: 0.3
+  timeBeforeDespawnIfNotHit: 1
   hitVFX: {fileID: 243425816}
   hitSFX:
   - {fileID: 8300000, guid: 976020b0b3d4f7243af32aeab52cda5e, type: 3}

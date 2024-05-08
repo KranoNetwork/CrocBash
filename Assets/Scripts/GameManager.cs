@@ -17,42 +17,61 @@ public enum GameStates { Starting, Playing, Ending }
 public class GameManager : MonoBehaviour
 {
     /// <summary>
-    /// 
+    /// This manages and runs the different "sequences" of the game so to say
+    ///  * Runs the intro with the instructions showing 
+    ///  * Runs the game play
+    ///     * Manages how long the gameplay lasts for 
+    ///     * Manages the score
+    ///  * Runs the outro showing the "Congrats!" UI and final score
     /// </summary>
 
     // P R O P E R T I E S
+    #region 'Properties'
     [Header("State Management")]
-    [SerializeField] private GameStates State;
+    [Tooltip("The state of the game.")]
+    public GameStates State;
 
     [Header("Score Management")]
-    [SerializeField] float StartTimerLength; // length of the intro of the experience
+    [Tooltip("Duration of the intro sequence.")]
+    [SerializeField] float StartTimerLength; 
     private Timer IntroTimer; //timer for the intro
+    [Tooltip("Duration of the gameplay sequence.")]
     [SerializeField] float RoundTimerLength; //length of the round -> the amount of time the gameplay runs for 
     public Timer RoundTimer; // timer for the gameplay
-    public int Score = 0; // the score
+    [Tooltip("The score.")]
+    public int Score = 0;
 
 
     [Header("UI References")]
+    [Tooltip("Instructions screen.")]
     [SerializeField] private GameObject IntroUIObject;
+    [Tooltip("Text field the time is displayed in.")]
     [SerializeField] private TMP_Text IntroTimerDiplay;
 
+    [Tooltip("Gameplay UI")]
     [SerializeField] private GameObject GamePlayUiObject;
-    [SerializeField] TMP_Text TimeDisplay;
-    [SerializeField] TMP_Text ScoreText;
-    [SerializeField] TMP_Text EndScoreText;
+    [Tooltip("Text field the time is displayed in.")]
+    [SerializeField] private TMP_Text TimeDisplay;
+    [Tooltip("Text field the score is displayed in.")]
+    [SerializeField] private TMP_Text ScoreText;
 
+    [Tooltip("Text field the time is displayed in.")]
+    [SerializeField] private TMP_Text EndScoreText;
+    [Tooltip("End UI")]
     [SerializeField] private GameObject EndUITextObjects;
 
-    [Header("Audio Refs")]
+    [Header("Audio References")]
     [SerializeField] private AudioSource startRoundSFX;
     [SerializeField] private AudioSource endRoundSFX;
 
     [Header("Object References")]
+    [Tooltip("Reference to the Croc Manager.")]
     [SerializeField] private CrocManager crocManager;
 
-    
+    #endregion
 
     // U N I T Y  M E T H O D S
+    #region 'Unity Methods'
     void Awake()
     {
         State = GameStates.Starting;
@@ -82,19 +101,30 @@ public class GameManager : MonoBehaviour
                 break;
         }
     }
+    #endregion
 
-    // M I S C  M E T H O D S
+    // I N T R O   S E Q U E N C E 
+    #region 'Intro Methods'
+    /// <summary>
+    /// Starts the beginning intro with the instructions.
+    /// </summary>
     private void StartIntro()
     {
         IntroTimer.StartTimer(Time.time, StartTimerLength);
         IntroUIObject.SetActive(true);
 
     }
+    /// <summary>
+    /// Runs the intro according to the timer.
+    /// </summary>
     private void PlayIntro()
     {
         DisplayIntroUITexts();
         CheckIntroTimer();
     }
+    /// <summary>
+    /// Ends the intro sequence.
+    /// </summary>
     private void EndIntro()
     {
         startRoundSFX.Play();
@@ -102,6 +132,27 @@ public class GameManager : MonoBehaviour
         IntroUIObject.SetActive(false);
         IntroTimer.State = TimerState.Off;
     }
+    /// <summary>
+    /// Checks the timer to see if the intro sequence has ended.
+    /// </summary>
+    void CheckIntroTimer()
+    {
+        IntroTimer.UpdateTimer(Time.time);
+
+        if (IntroTimer.State == TimerState.Ended)
+        {
+            State = GameStates.Playing;
+            EndIntro();
+            StartGamePlay();
+        }
+    }
+    #endregion
+
+    // G A M E P L A Y   S E Q U E N C E
+    #region 'Gameplay Methods'
+    /// <summary>
+    /// Starts the gameplay.
+    /// </summary>
     private void StartGamePlay()
     {
         GamePlayUiObject?.SetActive(true);
@@ -115,30 +166,17 @@ public class GameManager : MonoBehaviour
         RoundTimer.StartTimer(Time.time, RoundTimerLength);
         crocManager.StartGame();
     }
+    /// <summary>
+    /// Runs the gameplay.
+    /// </summary>
     private void UpdateGamePlay()
     {
         CheckGameplayTimer();
         DisplayGameplayUITexts();
     }
-
-    public void EndRound()
-    {
-        State = GameStates.Ending;
-        crocManager.OnRoundEnd();
-        RoundTimer = new Timer();
-        //SetHighScore();
-        endRoundSFX.Play();
-        SetEndUiContent();
-    }
-
-    public void RestartGame()
-    {
-        //ExitThing.SetActive(false);
-
-        Score = 0;
-        StartGamePlay();
-    }
-
+    /// <summary>
+     /// Checks the timer for the gameplay to see if it ended.
+     /// </summary>
     void CheckGameplayTimer()
     {
         RoundTimer.UpdateTimer(Time.time);
@@ -149,24 +187,31 @@ public class GameManager : MonoBehaviour
             EndRound();
         }
     }
-    void CheckIntroTimer()
+    /// <summary>
+    /// Ends the gameplay.
+    /// </summary>
+    public void EndRound()
     {
-        IntroTimer.UpdateTimer(Time.time);
-        
-        if (IntroTimer.State == TimerState.Ended)
-        {
-            State = GameStates.Playing;
-            EndIntro();
-            StartGamePlay();
-        }
+        State = GameStates.Ending;
+        crocManager.OnRoundEnd();
+        RoundTimer = new Timer();
+        //SetHighScore();
+        endRoundSFX.Play();
+        SetEndUiContent();
     }
+    
+    #endregion
 
+    // S C O R E   M A N A G E M E N T
+    #region 'Score Management'
     public void IncreaseScore(int _increase)
     {
         Score += _increase;
-        //UnityEngine.Debug.Log("METHOD SCORE: " +  Score);
     }
+    #endregion
 
+    // U I   M A N A G E M E N T
+    #region 'UI Management'
     void DisplayGameplayUITexts()
     {
         float tempNum = Mathf.Round(RoundTimer.EndTime - RoundTimer.CurrentTime);
@@ -198,4 +243,5 @@ public class GameManager : MonoBehaviour
         EndUITextObjects.SetActive(true);
         EndScoreText.text = Score.ToString();
     }
+    #endregion
 }

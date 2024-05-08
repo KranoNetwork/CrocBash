@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Final_Scene.unity
     guid: 17e76b169d4ab72408475549dc658638
   - enabled: 0
-    path: Assets/Scenes/ArtAssetsTestScene.unity
+    path: Assets/Scenes/OldScenes/ArtAssetsTestScene.unity
     guid: 765e864480d9f6c46afb9d1595456d77
   - enabled: 0
     path: Assets/Scenes/OldScenes/MainMenu.unity

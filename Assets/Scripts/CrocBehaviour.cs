@@ -25,36 +25,51 @@ public class CrocBehaviour : MonoBehaviour
     /// </summary>
 
     // P R O P E R T I E S
+    #region 'Properties'
     [Header("Movement")]
-    [SerializeField] float moveDistance; //distance to move the croc up
-    public CrocState State; //the croc's state
-    bool isCoroutineRunning; //Used to track whether or not the coroutine animating and moving the crocs has ended or not
-    Vector3 originalPosition; // original pos for putting the croc back down
+    [Tooltip("Distance to move the croc up")]
+    [SerializeField] private float moveDistance;
+    [Tooltip("The croc's state")]
+    public CrocState State; 
+    private bool isCoroutineRunning; //Used to track whether or not the coroutine animating and moving the crocs has ended or not
+    private Vector3 originalPosition; // original pos for putting the croc back down
+    [Tooltip("Duration the coroutine waits before moving the croc up.")]
+    [SerializeField] private float popUpMovementDelay;
+    [Tooltip("Duration the coroutine waits before moving the croc down when hit.")]
+    [SerializeField] private float hitMovementDelay;
+    [Tooltip("Duration the coroutine waits before moving the croc down when despawned.")]
+    [SerializeField] private float despawnMovementDelay;
 
     [Header("Timer")]
-    public float timeBeforeDespawnIfNotHit; //amount of time to wait before despawning
-    [SerializeField] float minimumTimeBeforeDespawn;
-    [SerializeField] float rateOfDecrease;
-    Timer despawnTimer; //timer for handling despawing if not hit
+    [Tooltip("Amount of time to wait before despawning.")]
+    [SerializeField] private float timeBeforeDespawnIfNotHit; 
+    private Timer despawnTimer; //timer for handling despawing if not hit
 
     [Header("Animation")]
+    [Tooltip("Reference to the hit particle fx.")]
     [SerializeField] ParticleSystem hitVFX; //the hit particle FX attached to the croc gameObject
-    TriggerParticleFX GroundParticleFX; //Script that triggers a particle effect, in this use case it's the ground particle effect
-    Animator animator;
+    private TriggerParticleFX GroundParticleFX; //Script that triggers a particle effect, in this use case it's the ground particle effect
+    private Animator animator;
 
     [Header("Audio")]
-    [SerializeField] AudioClip[] hitSFX; //array of hit SFX, gets initialized in editor
-    [SerializeField] AudioClip[] spawnSFX; //array of spawn SFX, gets initialized in editor
-    [SerializeField] AudioClip[] despawnSFX; //array of despawn SFX, gets initialized in editor
-    AudioSource audioSource; //reference to the audioSource for playing sound
+    [Tooltip("Collection of hit sound fx to play.")]
+    [SerializeField] private AudioClip[] hitSFX; //array of hit SFX, gets initialized in editor
+    [Tooltip("Collection of spawn sound fx to play.")]
+    [SerializeField] private AudioClip[] spawnSFX; //array of spawn SFX, gets initialized in editor
+    [Tooltip("Collection of despawn sound fx to play.")]
+    [SerializeField] private AudioClip[] despawnSFX; //array of despawn SFX, gets initialized in editor
+    private AudioSource audioSource; //reference to the audioSource for playing sound
 
     [Header("References")]
+    [Tooltip("The tag on the player/hammer gameObjects.")]
     [SerializeField] string playerTagName; // the tag the player has (through the liminal tag package)
-    [SerializeField] CrocManager crocManager; //[TD] - dependency
-    Rigidbody rb; // the rigidbody attached to the gameObj this script is attached to
-
+    [Tooltip("Reference to the Croc Manager")]
+    [SerializeField] private CrocManager crocManager; // Dependency -> the crocs need a reference to the croc manager
+    private Rigidbody rb; // the rigidbody attached to the gameObj this script is attached to
+    #endregion
 
     // U N I T Y  M E T H O D S
+    #region 'Unity Methods'
     void Awake()
     {
         despawnTimer = new Timer();
@@ -97,8 +112,10 @@ public class CrocBehaviour : MonoBehaviour
                 break;
         }
     }
+    #endregion
 
     // C O L L I S I O N
+    #region 'Collision'
     public void OnCollisionEnter(Collision collision)
     {
         // used for making sure the things are hit from above and not from the side
@@ -115,7 +132,7 @@ public class CrocBehaviour : MonoBehaviour
                 Hit();
             }
 
-            // logic for making sure the croc doesn't get hit from the side when it's down
+            #region 'logic for making sure the croc doesn't get hit from the side when it's down'
             if (_tempRelativePosition.y < 1)
             {
                 //Debug.Log("The object is to the Below");
@@ -137,13 +154,16 @@ public class CrocBehaviour : MonoBehaviour
                 //Debug.Log("The object is in front.");
                 rb.isKinematic = true;
             }
-
+            #endregion
         }
     }
-
+    #endregion
 
     // A C T I O N S   A N D   B E H A V I O R
     #region 'Actions and Behavior'
+    /// <summary>
+    /// Pops the croc up and runs the behavior that goes along with that.
+    /// </summary>
     public void PopUp() // Replaces the PopUp() method from MoleController.cs
     {
         Debug.Log("POPPING UP!");
@@ -156,6 +176,9 @@ public class CrocBehaviour : MonoBehaviour
 
         State = CrocState.IsUp;
     }
+    /// <summary>
+    /// Despawns the croc and runs the behavior that goes along with that.
+    /// </summary>
     public void Despawn()
     {
         if (State == CrocState.IsUp)
@@ -174,9 +197,12 @@ public class CrocBehaviour : MonoBehaviour
             State = CrocState.IsDown;
         }
     }
+    /// <summary>
+    /// Runs the behavior the crocs do when they are hit.
+    /// </summary>
     private void Hit()
     {
-        if (State == CrocState.IsUp )
+        if (State == CrocState.IsUp)
         {
             State = CrocState.IsHit;
             Debug.Log("HIT!!");
@@ -195,6 +221,9 @@ public class CrocBehaviour : MonoBehaviour
             State = CrocState.IsDown;
         }
     }
+    /// <summary>
+    /// Stops whatever behavior the croc is currnently doing and resets them.
+    /// </summary>
     public void Stop()
     {
         Debug.Log("STOPPED!");
@@ -205,7 +234,7 @@ public class CrocBehaviour : MonoBehaviour
 
 
     // M O V E M E N T   A N D    A N I M A T I O N
-
+    #region 'Movement and Animation'
     /// <summary>
     /// Defines the different types of action movements of the crocs.
     /// </summary>
@@ -223,9 +252,9 @@ public class CrocBehaviour : MonoBehaviour
         float secondsToWait = 2;
         switch (action)
         {
-            case MoveActionType.Up: secondsToWait = 3; break;
-            case MoveActionType.Down: secondsToWait = .7f; break;
-            case MoveActionType.Hit: secondsToWait = .75f; break;
+            case MoveActionType.Up: secondsToWait = popUpMovementDelay; break;
+            case MoveActionType.Down: secondsToWait = hitMovementDelay; break;
+            case MoveActionType.Hit: secondsToWait = despawnMovementDelay; break;
         }
         animator.SetTrigger(animationTriggerName); //triggers the animation
         yield return new WaitForSeconds(secondsToWait); //waits 
@@ -244,6 +273,7 @@ public class CrocBehaviour : MonoBehaviour
         }
         isCoroutineRunning = false;
     }
+    #endregion
     #endregion
 
     // TIMER MANAGEMENT
@@ -285,25 +315,10 @@ public class CrocBehaviour : MonoBehaviour
         return false;
     }
 
-    /// <summary>
-    /// Decreases the amount of time the croc waits before it despawns.
-    /// </summary>
-    public void DecreaseDespawnTime()
-    {
-        Debug.Log("DECREASING DESPAWN TIME");
-        timeBeforeDespawnIfNotHit = timeBeforeDespawnIfNotHit / rateOfDecrease;
-
-        if (timeBeforeDespawnIfNotHit < minimumTimeBeforeDespawn)
-        {
-            Debug.Log("DESPAWN TIME AT MINIMUM");
-            timeBeforeDespawnIfNotHit = minimumTimeBeforeDespawn;
-        }
-            
-    }
     #endregion
 
-    // M E T H O D S: MINOR
-
+    // A U D I O   M A N A G E M E N T 
+    #region 'Audio Management'
     /// <summary>
     /// Picks a random SFX from the passed in array
     /// </summary>
@@ -313,10 +328,5 @@ public class CrocBehaviour : MonoBehaviour
     {
         return audioClips[UnityEngine.Random.Range(0, audioClips.Length)];
     }
-
-    
-
-    
-    // the original MoleController.cs had timers in it that weren't actually 
-    // being used, so that logic (the TickTimers() method) has been removed
+    #endregion
 }
